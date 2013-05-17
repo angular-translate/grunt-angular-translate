@@ -1,0 +1,52 @@
+{
+  "name": "grunt-angular-translate",
+  "version": "0.1.0",
+  "description": "Extract all the translation keys for angular-translate project",
+  "main": "Gruntfile.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.2.0",
+    "grunt-contrib-nodeunit": "~0.1.2",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt": "~0.4.0"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/firehist/grunt-angular-translate.git"
+  },
+  "keywords": [
+    "AngularJS",
+    "angular-translate",
+    "gruntplugin",
+    "grunt",
+    "javascript",
+    "js",
+    "translate",
+    "i18n"
+  ],
+  "author": "Benjamin Longearet",
+  "bugs": {
+    "url": "https://github.com/firehist/grunt-angular-translate/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/gruntjs/grunt-contrib-copy/blob/master/LICENSE-MIT"
+    }
+  ],
+  "gitHead": "dd655f85e3b4c59b7f3ac5ebf3f1ccad69876bb8",
+  "readmeFilename": "README.md"
+}
