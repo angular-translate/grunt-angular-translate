@@ -39,3 +39,5 @@ Licensed under the MIT license.
 [getting_started]: https://github.com/gruntjs/grunt/wiki/Getting-started
 [angular_translate]: https://github.com/PascalPrecht/angular-translate
 [pascalPrecht]: https://github.com/PascalPrecht
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/882c3bab5f5b2d7c63f79337a9a3688a "githalytics.com")](http://githalytics.com/firehist/grunt-angular-translate)
