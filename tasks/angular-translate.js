@@ -10,14 +10,6 @@
 
 module.exports = function ( grunt ) {
 
-  var path            = require('path'),
-      // Use to match {{'TRANSLATION' | translate}}
-      filterRegex     = /{{\s*['"]([^\']*)['"]\s*\|\s*translate\s*}}/gi,
-      // Use to match <a href="#" translate>TRANSLATION</a>
-      directiveRegex  = /<[^>]*translate[^>]*>([^<]*)<\/[^>]*>/gi,
-      // Use to match $translate('TRANSLATION')
-      javascriptRegex = /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi;
-
   grunt.registerMultiTask('i18nextract', 'Generate json language file for angular-translate project', function() {
     // Require lang array with length >= 1
     if (!this.data.lang || !this.data.lang.length) {
@@ -42,7 +34,6 @@ module.exports = function ( grunt ) {
       grunt.log.debug("Process file: " + file);
 
       var content = grunt.file.read(file), r;
-
       while ((r = filterRegex.exec(content)) !== null) {
         if (r.length === 2) {
           results[ grunt.util._(r[1]).strip() ] = '';
@@ -54,6 +45,12 @@ module.exports = function ( grunt ) {
         }
       }
       while ((r = directiveRegex.exec(content)) !== null) {
+        if (r.length === 2) {
+          results[ grunt.util._(r[1]).strip() ] = '';
+        }
+      }
+
+      while ((r = javascriptRegex2.exec(content)) !== null) {
         if (r.length === 2) {
           results[ grunt.util._(r[1]).strip() ] = '';
         }
@@ -124,4 +121,14 @@ module.exports = function ( grunt ) {
     grunt.log.ok(nbLang + ' file' + (nbLang ? 's' : '') + ' updated');
 
   });
+
+  var path            = require('path'),
+      // Use to match {{'TRANSLATION' | translate}}
+      filterRegex     = /{{\s*['"](.*[\S].*)['"]\s*\|\s*translate\s*(?::'.*'|:[\w]*|)(?:\|.*)*\s*}}/gi,
+      // Use to match <a href="#" translate>TRANSLATION</a>
+      directiveRegex  = /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
+      // Use to match $translate('TRANSLATION')
+      javascriptRegex = /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
+      // Used to match $filter("translate")("TRANSLATION")
+      javascriptRegex2 = /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi;
 };
