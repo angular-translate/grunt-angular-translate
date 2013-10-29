@@ -1,6 +1,6 @@
 {
   "name": "grunt-angular-translate",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "description": "Extract all the translation keys for angular-translate project",
   "main": "Gruntfile.js",
   "directories": {
@@ -14,6 +14,7 @@
     "node": ">= 0.8.0"
   },
   "devDependencies": {
+    "grunt-bump": "0.0.6",
     "grunt-contrib-jshint": "~0.2.0",
     "grunt-contrib-nodeunit": "~0.1.2",
     "grunt-contrib-clean": "~0.4.0",
