@@ -11,18 +11,24 @@
 module.exports = function ( grunt ) {
 
   grunt.registerMultiTask('i18nextract', 'Generate json language file for angular-translate project', function() {
+
+    var _ = grunt.util._;
+
     // Require lang array with length >= 1
     if (!this.data.lang || !this.data.lang.length) {
       grunt.fail('No lang set for i18nextract');
     }
 
     var files     = grunt.file.expand( this.data.src ),
-        dest      = this.data.dest || '.',
-        source    = this.data.source || '',
-        prefix    = this.data.prefix || '',
-        safeMode  = this.data.safeMode ? true : false,
-        suffix    = this.data.suffix || '.json',
-        results   = {};
+         dest      = this.data.dest || '.',
+         extraSrc     = grunt.file.expand( this.data.extraSrc || '' ),
+         extraSrcName      = grunt.util._.union( this.data.extraSrcName || [], ['label'] ),
+         defaultLang      = this.data.defaultLang || '.',
+         source    = this.data.source || '',
+         prefix    = this.data.prefix || '',
+         safeMode  = this.data.safeMode ? true : false,
+         suffix    = this.data.suffix || '.json',
+         results   = {};
 
     if (!grunt.file.exists(dest)) {
       grunt.file.mkdir( dest );
@@ -34,7 +40,12 @@ module.exports = function ( grunt ) {
       grunt.log.debug("Process file: " + file);
 
       var content = grunt.file.read(file), r;
-      while ((r = filterRegex.exec(content)) !== null) {
+      while ((r = filterRegexSimple.exec(content)) !== null) {
+        if (r.length === 2) {
+          results[ grunt.util._(r[1]).strip() ] = '';
+        }
+      }
+      while ((r = filterRegexDouble.exec(content)) !== null) {
         if (r.length === 2) {
           results[ grunt.util._(r[1]).strip() ] = '';
         }
@@ -54,6 +65,34 @@ module.exports = function ( grunt ) {
         if (r.length === 2) {
           results[ grunt.util._(r[1]).strip() ] = '';
         }
+      }
+
+    });
+
+    var _recurseObject = function (data) {
+      var currentArray = new Array();
+      if (_.isObject(data) || _.isArray(data['attr'])) {
+        for (var attr in data) {
+          if (_.isString(data[attr]) && _.indexOf(extraSrcName, attr) !== -1) {
+            currentArray.push(data[attr]);
+          } else if (_.isObject(data[attr]) || _.isArray(data['attr'])) {
+              var recurse = _recurseObject(data[attr]);
+              currentArray = _.union(currentArray, recurse);
+          }
+        }
+      }
+      return currentArray;
+    };
+
+    // Parse all extra files to extra
+    extraSrc.forEach(function(file) {
+
+      grunt.log.debug("Process extra file: " + file);
+
+      var content = grunt.file.readJSON(file);
+      var extractValues = _recurseObject(content);
+      for (var i in extractValues) {
+          results[ _(extractValues[i]).strip() ] = '';
       }
 
     });
@@ -94,7 +133,11 @@ module.exports = function ( grunt ) {
         nbTra++;
 
         if (translation === '') {       // Case empty translation
-          nbEmpty++;
+          if (lang === defaultLang) {
+            translations[ key ] = key;
+          } else {
+            nbEmpty++;
+          }
         }
         if ( !isJson && isResults ) {   // Case new translation (exist into src files but not in json file)
           nbNew++;
@@ -124,7 +167,8 @@ module.exports = function ( grunt ) {
 
   var path            = require('path'),
       // Use to match {{'TRANSLATION' | translate}}
-      filterRegex     = /{{\s*['"](.*[\S].*)['"]\s*\|\s*translate\s*(?::'.*'|:[\w]*|)(?:\|.*)*\s*}}/gi,
+      filterRegexDouble     = /{{\s*"((?:\\.|[^"\\])*)"\s*\|\s*translate(?:[^}]*)}}/gi,
+      filterRegexSimple     = /{{\s*'((?:\\.|[^'\\])*)'\s*\|\s*translate(?:[^}]*)}}/gi,
       // Use to match <a href="#" translate>TRANSLATION</a>
       directiveRegex  = /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
       // Use to match $translate('TRANSLATION')
