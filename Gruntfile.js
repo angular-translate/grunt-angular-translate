@@ -29,6 +29,27 @@ module.exports = function(grunt) {
     },
 
     /**
+     * Increments the version number, etc.
+     */
+    bump: {
+      options: {
+        files: [
+          "package.json"
+        ],
+        commit: true,
+        commitMessage: 'chore(release): v%VERSION%',
+        commitFiles: [
+          "package.json"
+        ],
+        createTag: true,
+        tagName: 'v%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: true,
+        pushTo: 'origin'
+      }
+    },
+
+    /**
      * i18nextract build json lang files
      */
     i18nextract: {
@@ -76,6 +97,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-nodeunit');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-bump');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
