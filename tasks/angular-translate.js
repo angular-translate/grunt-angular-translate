@@ -10,19 +10,23 @@
 
 module.exports = function (grunt) {
 
-  grunt.registerMultiTask('i18nextract', 'Generate json language file for angular-translate project', function () {
+  grunt.registerMultiTask('i18nextract', 'Generate json language file(s) for angular-translate project', function () {
 
+    // Shorcuts!
     var _ = grunt.util._;
+    var _log = grunt.log;
+    var _file = grunt.file;
 
     // Require lang array with length >= 1
     if (!this.data.lang || !this.data.lang.length) {
       grunt.fail('No lang set for i18nextract');
     }
 
-    var files = grunt.file.expand(this.data.src),
+    // Declare all var from configuration
+    var files = _file.expand(this.data.src),
       dest = this.data.dest || '.',
-      extraSrc = grunt.file.expand(this.data.extraSrc || ''),
-      extraSrcName = grunt.util._.union(this.data.extraSrcName || [], ['label']),
+      jsonSrc = _file.expand(this.data.jsonSrc || ''),
+      jsonSrcName = _.union(this.data.jsonSrcName || [], ['label']),
       defaultLang = this.data.defaultLang || '.',
       source = this.data.source || '',
       prefix = this.data.prefix || '',
@@ -30,32 +34,60 @@ module.exports = function (grunt) {
       suffix = this.data.suffix || '.json',
       results = {};
 
-    if (!grunt.file.exists(dest)) {
-      grunt.file.mkdir(dest);
+    // Check directory exist
+    if (!_file.exists(dest)) {
+      _file.mkdir(dest);
     }
 
-    // Parse all files to extract translations
+    // Parse all files to extract translations with defined regex
     files.forEach(function (file) {
 
-      grunt.log.debug("Process file: " + file);
+      _log.debug("Process file: " + file);
+      var content = _file.read(file), r;
 
-      var content = grunt.file.read(file), r;
-
+      // Execute all regex defined at the top of this file
       for (var i in regexs) {
+
         while ((r = regexs[i].exec(content)) !== null) {
-          if (r.length === 2) {
-            results[ grunt.util._(r[1]).strip() ] = '';
+          // Result expected [STRING, KEY, SOME_REGEX_STUF]
+          // Except for plural hack [STRING, KEY, ARRAY_IN_STRING]
+          if (r.length >= 2) {
+            var translationKey = _(r[1]).strip();
+            var translationDefaultValue = "";
+
+            // Avoid emptu translation
+            if (translationKey === "") {
+              return;
+            }
+
+            // Particular case for plural
+            // Build default key by attribute in HTML code
+            if (i == "HtmlDirectivePlural") {
+              var evalString = eval(r[2]);
+              if (_.isArray(evalString) && evalString.length >= 2) {
+                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+              }
+            }
+            results[ translationKey ] = translationDefaultValue;
           }
         }
       }
 
     });
 
+    /**
+     * Recurse an object to retrieve as an array all the value of named parameters
+     * INPUT: {"myLevel1": [{"val": "myVal1", "label": "MyLabel1"}, {"val": "myVal2", "label": "MyLabel2"}], "myLevel12": {"new": {"label": "myLabel3é}}}
+     * OUTPUT: ["MyLabel1", "MyLabel2", "MyLabel3"]
+     * @param data
+     * @returns {Array}
+     * @private
+     */
     var _recurseObject = function (data) {
       var currentArray = new Array();
       if (_.isObject(data) || _.isArray(data['attr'])) {
         for (var attr in data) {
-          if (_.isString(data[attr]) && _.indexOf(extraSrcName, attr) !== -1) {
+          if (_.isString(data[attr]) && _.indexOf(jsonSrcName, attr) !== -1) {
             currentArray.push(data[attr]);
           } else if (_.isObject(data[attr]) || _.isArray(data['attr'])) {
             var recurse = _recurseObject(data[attr]);
@@ -67,18 +99,16 @@ module.exports = function (grunt) {
     };
 
     // Parse all extra files to extra
-    extraSrc.forEach(function (file) {
-
-      grunt.log.debug("Process extra file: " + file);
-
-      var content = grunt.file.readJSON(file);
-      var extractValues = _recurseObject(content);
-      for (var i in extractValues) {
-        results[ _(extractValues[i]).strip() ] = '';
+    jsonSrc.forEach(function (file) {
+      _log.debug("Process extra file: " + file);
+      var content = _file.readJSON(file);
+      var recurseData = _recurseObject(content);
+      for (var i in recurseData) {
+        results[ _(recurseData[i]).strip() ] = '';
       }
-
     });
 
+    // Build all output langage files
     this.data.lang.forEach(function (lang) {
 
       var destFilename = dest + '/' + prefix + lang + suffix,
@@ -91,73 +121,78 @@ module.exports = function (grunt) {
         json = {};
 
       // Test source filename
-      if (filename === '' || !grunt.file.exists(filename)) {
+      if (filename === '' || !_file.exists(filename)) {
         filename = destFilename;
       }
 
-      grunt.log.subhead('Process ' + lang + ' : ' + filename);
+      _log.subhead('Process ' + lang + ' : ' + filename);
 
-      if (!grunt.file.exists(filename)) {
-        grunt.log.debug('File doesn\'t exist');
+      if (!_file.exists(filename)) {
+        _log.debug('File doesn\'t exist');
         translations = results;
       } else {
-        grunt.log.debug('File exist');
-        json = grunt.file.readJSON(filename);
-
-        grunt.util._.extend((translations = grunt.util._.clone(results) ), json);
+        _log.debug('File exist');
+        json = _file.readJSON(filename);
+        _.extend((translations = _.clone(results) ), json);
       }
       // Make some stats
-      for (var key in translations) {
-        var translation = translations[ key ],
-          isJson = grunt.util.kindOf(json[key]) === 'string',
-          isResults = grunt.util.kindOf(results[key]) === 'string';
+
+      for (var k in translations) {
+        var translation = translations[k];
+        var isJson = _.isString(json[k]);
+        var isResults = _.isString(results[k]);
 
         nbTra++;
 
-        if (translation === '') {       // Case empty translation
+        // Case empty translation
+        if (translation === '') {
           if (lang === defaultLang) {
-            translations[ key ] = key;
+            translations[ k ] = k;
           } else {
             nbEmpty++;
           }
         }
-        if (!isJson && isResults) {   // Case new translation (exist into src files but not in json file)
+        // Case new translation (exist into src files but not in json file)
+        if (!isJson && isResults) {
           nbNew++;
         }
-        if (isJson && !isResults) {   // Case deleted translation (exist in json file but not into src files)
+        // Case deleted translation (exist in json file but not into src files)
+        if (isJson && !isResults) {
           nbDel++;
           if (!safeMode) {
-            delete translations[ key ];
+            delete translations[ k ];
           }
         }
-      }
+      };
       // Some information for the output
-      if (!grunt.file.exists(destFilename)) {
-        grunt.log.subhead('Create file: ' + destFilename);
+      if (!_file.exists(destFilename)) {
+        _log.subhead('Create file: ' + destFilename);
       }
 
-      grunt.log.writeln('Empty: ' + nbEmpty + ' (' + Math.round(nbEmpty / nbTra * 100) + '%) / New: ' + nbNew + ' / Deleted: ' + nbDel);
+      _log.writeln('Empty: ' + nbEmpty + ' (' + Math.round(nbEmpty / nbTra * 100) + '%) / New: ' + nbNew + ' / Deleted: ' + nbDel);
       // Write JSON file for lang
-      grunt.file.write(destFilename, JSON.stringify(translations, null, 4));
+      _file.write(destFilename, JSON.stringify(translations, null, 4));
 
     });
 
     var nbLang = this.data.lang.length || 0;
-    grunt.log.ok(nbLang + ' file' + (nbLang ? 's' : '') + ' updated');
+    _log.ok(nbLang + ' file' + (nbLang ? 's' : '') + ' updated');
 
   });
 
-  var path = require('path');
+  // Regexs that will be executed on files
   var regexs = {
-    // Use to match {{'TRANSLATION' | translate}}
-    filterRegexDouble: /{{\s*"((?:\\.|[^"\\])*)"\s*\|\s*translate(?:[^}]*)}}/gi,
-    filterRegexSimple: /{{\s*'((?:\\.|[^'\\])*)'\s*\|\s*translate(?:[^}]*)}}/gi,
-    filterRegexPlural: /angular-plural-extract=\"((?:\\.|[^"\\])*)\"/gi,
-    // Use to match <a href="#" translate>TRANSLATION</a>
-    directiveRegex: /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
-    // Use to match $translate('TRANSLATION')
-    javascriptRegex: /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
-    // Used to match $filter("translate")("TRANSLATION")
-    javascriptRegex2: /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi
+    // @TODO Improve this one...
+    // Match: {{'TRANSLATION' | translate}}
+    HtmlFilterSimpleQuote: /{{\s*'((?:\\.|[^'\\])*)'\s*\|\s*translate(?:[^}]*)}}/gi,
+    HtmlFilterDoubleQuote: /{{\s*"((?:\\.|[^"\\])*)"\s*\|\s*translate(?:[^}]*)}}/gi,
+    // Match: <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>
+    HtmlDirectivePlural: /translate=\"((?:\\.|[^"\\])*)\".*angular-plural-extract=\"((?:\\.|[^"\\])*)\"/gi,
+    // Match: <a href="#" translate>TRANSLATION</a>
+    HtmlDirective: /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
+    // Match: $translate('TRANSLATION')
+    JavascriptService: /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
+    // Match: $filter("translate")("TRANSLATION")
+    JavascriptFilter: /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi
   };
 };
