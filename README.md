@@ -9,18 +9,108 @@ Use `npm install grunt-angular-translate`
 
 Then add this line to your project's `Gruntfile.js` file:
 
-```javascript
-grunt.loadNpmTasks('grunt-angular-translate');
-```
+`grunt.loadNpmTasks('grunt-angular-translate');`
 
 grunt-angular-translate provide to your grunt environment a task called i18nextract which need a configuration to rocks (Please read the documentation).
 
 This extraction is made to work with the [angular-translate][angular_translate] project created by [Pascal Precht][pascalPrecht]
 
+## Use cases
+
+### Views
+#### Filters
+```{{'TRANSLATION' | translate}}```
+```{{'TRANSLATION' | translate:XXXXXX}}```
+#### Directives
+```<a href="#" translate>TRANSLATION</a>```
+#### Directives plural (custom attribute angular-plural-extract to automatize extraction)
+```<span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>```
+
+### Javascript
+#### Filter
+```$filter("translate")("TRANSLATION")```
+#### Service angular-translate
+```$translate('TRANSLATION')```
+
+## Options
+Options src and jsonSrc may be specified according to the grunt Configuring tasks guide.
+
+#### src
+Type: `Array`
+Default: `undefined`
+
+Example: `[ 'src/**/*.js' ]`
+
+Define a file list to parse for extract translation.
+
+#### jsonSrc
+Type: `Array`
+Default: `undefined`
+
+Example: `[ 'config/*.json' ]`
+
+Define a JSON file list to parse for extract translation.
+
+#### jsonSrcName
+Type: `Array`
+Default: `undefined`
+
+Example: `[ 'label', 'name' ]`
+
+Define the keys to find corresponding values through JSON object.
+
+#### defaultLang
+Type: `String`
+Default: `undefined`
+
+Example: `"en_US"`
+
+Define the default language. For default langage, by default the key will be set as value.
+
+#### lang
+Type: `Array`
+Default: `undefined`
+
+Example: `['fr_FR', 'en_US']`
+
+Define langage to be extract (fr__FR, en__US, xxx). xxx will be the output filename wrapped by prefix and suffix option.
+
+#### prefix
+Type: `String`
+Default: `""`
+
+Example: `".json"`
+
+Set prefix to output filenames (cf [angular-translate#static-files][https://github.com/PascalPrecht/angular-translate/wiki/Asynchronous-loading#using-extension-static-files-loader]).
+
+#### suffix
+Type: `String`
+Default:  `""`
+
+Example: `"project_"`
+
+Set suffix to output filenames (cf [angular-translate#static-files][https://github.com/PascalPrecht/angular-translate/wiki/Asynchronous-loading#using-extension-static-files-loader]).
+
+#### dest
+Type: `String`
+Default:  `""`
+
+Example: `"src/assets/i18n"`
+
+Relative path to output folder.
+
+#### safeMode
+Type: `Boolean`
+Default: `false`
+
+If safeMode is set to `true` the deleted translations will stay in the output lang file.
+
 ## Test
 You will find the tests files into `test` directory.
 
 To run test use `grunt test`
+
+__to improve ... :-D__
 
 ## Documentation
 Please go to wiki page: [documentation](https://github.com/firehist/grunt-angular-translate/wiki/Documentation)
