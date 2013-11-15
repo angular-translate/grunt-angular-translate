@@ -17,22 +17,45 @@ module.exports = function (grunt) {
     var _log = grunt.log;
     var _file = grunt.file;
 
-    // Require lang array with length >= 1
-    if (!this.data.lang || !this.data.lang.length) {
-      grunt.fail('No lang set for i18nextract');
+
+    if (!_.isArray(this.data.lang) || !this.data.lang.length) {
+      grunt.fail('lang parameter is required.');
     }
 
     // Declare all var from configuration
     var files = _file.expand(this.data.src),
       dest = this.data.dest || '.',
-      jsonSrc = _file.expand(this.data.jsonSrc || ''),
+      jsonSrc = _file.expand(this.data.jsonSrc || []),
       jsonSrcName = _.union(this.data.jsonSrcName || [], ['label']),
       defaultLang = this.data.defaultLang || '.',
+      interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
       source = this.data.source || '',
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
       results = {};
+
+    var escapeRegExp = function (str) {
+      return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    }
+
+    // Regexs that will be executed on files
+    var regexs = {
+      // @TODO Improve this one...
+      // Match: {{'TRANSLATION' | translate}}
+
+      //(new RegExp(pid, "g")).exec(p.join(',')) !== null
+      HtmlFilterSimpleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + "\\s*'((?:\\\\.|[^'\\\\])*)'\\s*\\|\\s*translate(?:.*)" + escapeRegExp(interpolation.endDelimiter), "gi"),
+      HtmlFilterDoubleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\])*)"\\s*\\|\\s*translate(?:.*)' + escapeRegExp(interpolation.endDelimiter), "gi"),
+      // Match: <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>
+      HtmlDirectivePlural: /translate=\"((?:\\.|[^"\\])*)\".*angular-plural-extract=\"((?:\\.|[^"\\])*)\"/gi,
+      // Match: <a href="#" translate>TRANSLATION</a>
+      HtmlDirective: /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
+      // Match: $translate('TRANSLATION')
+      JavascriptService: /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
+      // Match: $filter("translate")("TRANSLATION")
+      JavascriptFilter: /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi
+    };
 
     // Check directory exist
     if (!_file.exists(dest)) {
@@ -180,19 +203,4 @@ module.exports = function (grunt) {
 
   });
 
-  // Regexs that will be executed on files
-  var regexs = {
-    // @TODO Improve this one...
-    // Match: {{'TRANSLATION' | translate}}
-    HtmlFilterSimpleQuote: /{{\s*'((?:\\.|[^'\\])*)'\s*\|\s*translate(?:[^}]*)}}/gi,
-    HtmlFilterDoubleQuote: /{{\s*"((?:\\.|[^"\\])*)"\s*\|\s*translate(?:[^}]*)}}/gi,
-    // Match: <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>
-    HtmlDirectivePlural: /translate=\"((?:\\.|[^"\\])*)\".*angular-plural-extract=\"((?:\\.|[^"\\])*)\"/gi,
-    // Match: <a href="#" translate>TRANSLATION</a>
-    HtmlDirective: /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
-    // Match: $translate('TRANSLATION')
-    JavascriptService: /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
-    // Match: $filter("translate")("TRANSLATION")
-    JavascriptFilter: /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi
-  };
 };
