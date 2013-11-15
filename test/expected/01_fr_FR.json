@@ -1,6 +1,8 @@
 {
     "My first translate": "Ma première traduction",
     "My second translate": "",
+    "Click here": "",
+    "if the download does not start automatically.": "",
     "My third translate": "",
     "TRANSLATION_ID": "{title}!",
     "TRANSLATION_KEY": "{NB, plural, one{Text pour un} other{Text pour #}",

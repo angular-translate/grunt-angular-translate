@@ -45,6 +45,7 @@ module.exports = function (grunt) {
       // Match: {{'TRANSLATION' | translate}}
 
       //(new RegExp(pid, "g")).exec(p.join(',')) !== null
+      //[^{}]*(?:{{\s*'([^']*)'\s*\|\s*translate(?:.*?)?\s*}})[^{}]*
       HtmlFilterSimpleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + "\\s*'((?:\\\\.|[^'\\\\])*)'\\s*\\|\\s*translate(?:.*)" + escapeRegExp(interpolation.endDelimiter), "gi"),
       HtmlFilterDoubleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\])*)"\\s*\\|\\s*translate(?:.*)' + escapeRegExp(interpolation.endDelimiter), "gi"),
       // Match: <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>

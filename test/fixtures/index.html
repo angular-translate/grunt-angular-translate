@@ -16,6 +16,9 @@
 
 <h2>{{ 'My second translate' |translate }}</h2>
 
+<div>{{'Click here'|translate}}</a>&nbsp;
+  {{'if the download does not start automatically.'|translate}}<br /><a href="#" onclick="return false;" ng-click="back()">{{'Back'}}</a></div>
+
 <h3 style="color:red;">{{ "My third translate" |translate }}</h3>
 <h4>{{ "TRANSLATION_ID" |translate:'{ title: "AngularJS Rox" }' }}</h4>
 <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']"
