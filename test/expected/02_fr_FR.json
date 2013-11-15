@@ -2,6 +2,7 @@
     "My first translate": "Ma première traduction",
     "My second translate": "",
     "My third translate": "",
-    "My paragraph": "Mon paragraphe",
+    "TRANSLATION_ID": "",
+    "TRANSLATION_KEY": "{NB, plural, one{TEXT FOR ONE} other{# TEXT FOR OTHER}",
     "mySuffix ---": "waou : "
 }

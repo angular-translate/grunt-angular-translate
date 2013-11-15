@@ -1,0 +1,16 @@
+{
+  "config": {
+    "label": "config:translation 00",
+    "array": [
+      {
+        "label": "config:translation 01"
+      },
+      {
+        "label": "config:translation 02"
+      }
+    ],
+    "level": {
+      "label": "config:translation 03"
+    }
+  }
+}
