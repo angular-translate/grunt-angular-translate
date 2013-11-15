@@ -54,30 +54,63 @@ module.exports = function(grunt) {
      */
     i18nextract: {
 
+      // Provide fr_FR language
       default_options: {
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
-        lang:     ['fr_FR'],
         prefix:   '00_',
         suffix:   '.json',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     ['fr_FR'],
         dest:     'tmp'
       },
 
-      exists_i18n : {
+      default_exists_i18n : {
+        prefix:   '01_',
+        suffix:   '.json',
         src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
         lang:     ['fr_FR'],
-        prefix:   '01_',
-        suffix:   '.json',   
         dest:     'tmp',
-        source:   'test/fixtures/exists_i18n.json' // Use to generate different output file
+        source:   'test/fixtures/default_exists_i18n.json' // Use to generate different output file
       },
 
-      deleted_i18n : {
+      default_deleted_i18n : {
+        prefix:   '02_',
+        suffix:   '.json',
         src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
         lang:     ['fr_FR'],
-        prefix:   '02_',
-        suffix:   '.json',   
         dest:     'tmp',
-        source:   'test/fixtures/deleted_i18n.json' // Use to generate different output file
+        source:   'test/fixtures/default_deleted_i18n.json' // Use to generate different output file
+      },
+
+      interpolation_bracket: {
+        prefix:   '03_',
+        suffix:   '.json',
+        interpolation: {
+          startDelimiter: '[[',
+          endDelimiter: ']]'
+        },
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     ['fr_FR'],
+        dest:     'tmp'
+      },
+
+      default_language: {
+        prefix:   '04_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     ['fr_FR', 'en_US'],
+        dest:     'tmp',
+        defaultLang: 'en_US'
+      },
+
+      json_extract: {
+        prefix:   '05_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        jsonSrc:  [ 'test/fixtures/*.json' ],
+        jsonSrcName: ['label'],
+        lang:     ['en_US'],
+        dest:     'tmp',
+        defaultLang: 'en_US'
       }
 
     },
