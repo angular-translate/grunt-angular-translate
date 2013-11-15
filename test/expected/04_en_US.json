@@ -1,0 +1,8 @@
+{
+    "My first translate": "My first translate",
+    "My second translate": "My second translate",
+    "My third translate": "My third translate",
+    "TRANSLATION_ID": "TRANSLATION_ID",
+    "TRANSLATION_KEY": "{NB, plural, one{TEXT FOR ONE} other{# TEXT FOR OTHER}",
+    "mySuffix ---": "mySuffix ---"
+}

@@ -2,19 +2,27 @@
 
 <html>
 
-  <head>
-    <title>A blank HTML file</title>
-    <meta charset="utf-8" />
-  </head>
+<head>
+  <title>A blank HTML file</title>
+  <meta charset="utf-8"/>
+</head>
 
-  <body>
+<body>
 
-    <h1>{{'My first translate'|translate}}</h1>
-    <h2>{{ 'My second translate'   |translate  }}</h2>
-    <h3 style="color:red;">{{ "My third translate"   |translate  }}</h3>
+<h1>[['Different interpolation'|translate]]</h1>
 
-    <p translate style="text-align:center">My paragraph</p>
 
-  </body>
+<h1>{{'My first translate'|translate}}</h1>
+
+<h2>{{ 'My second translate' |translate }}</h2>
+
+<h3 style="color:red;">{{ "My third translate" |translate }}</h3>
+<h4>{{ "TRANSLATION_ID" |translate:'{ title: "AngularJS Rox" }' }}</h4>
+<span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']"
+      translate-values="{NB: X}" translate-interpolation="messageformat"></span>
+
+<p translate style="text-align:center">My paragraph</p>
+
+</body>
 
 </html>
