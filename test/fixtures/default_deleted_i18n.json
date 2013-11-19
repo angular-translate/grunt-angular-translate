@@ -1,6 +1,6 @@
 {
-    "My first translate": "Ma première traduction",
-    "My paragraph": "Mon paragraphe",
-    "mySuffix ---": "waou : ",
-    "myDeleted value": "N'importe quoi!"
+  "HtmlFilterDoubleQuote{} interp\\\"olation {{xx}}": "My interpolation translation",
+  "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô": "My directive translation",
+  "JavascriptFilter 1/2 with var \"{name}\"": "my {name} javascript filter",
+  "myDeleted value": "N'importe quoi!"
 }

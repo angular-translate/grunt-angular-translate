@@ -39,23 +39,57 @@ module.exports = function (grunt) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
+    var _extractTranslation = function (regexName, regex, content, results) {
+      var r;
+      _log.debug("---------------------------------------------------------------------------------------------------");
+      _log.debug('Process extraction with regex : "' + regexName + '"');
+      _log.debug(regex);
+      regex.lastIndex = 0;
+      while ((r = regex.exec(content)) !== null) {
+
+        // Result expected [STRING, KEY, SOME_REGEX_STUF]
+        // Except for plural hack [STRING, KEY, ARRAY_IN_STRING]
+        if (r.length >= 2) {
+          var translationKey, evalString;
+          var translationDefaultValue = "";
+
+          switch (regexName) {
+            case 'HtmlDirectivePluralFirst':
+              var tmp = r[1];
+              r[1] = r[2];
+              r[2] = tmp;
+            case 'HtmlDirectivePluralLast':
+              evalString = eval(r[2]);
+              if (_.isArray(evalString) && evalString.length >= 2) {
+                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+              }
+              translationKey = _(r[1]).strip();
+              break;
+            default:
+              translationKey = _(r[1]).strip();
+          }
+
+          // Avoid emptu translation
+          if (translationKey === "") {
+            return;
+          }
+
+          results[ translationKey ] = translationDefaultValue;
+        }
+      }
+    };
+
     // Regexs that will be executed on files
     var regexs = {
-      // @TODO Improve this one...
-      // Match: {{'TRANSLATION' | translate}}
-
-      //(new RegExp(pid, "g")).exec(p.join(',')) !== null
-      //[^{}]*(?:{{\s*'([^']*)'\s*\|\s*translate(?:.*?)?\s*}})[^{}]*
-      HtmlFilterSimpleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + "\\s*'((?:\\\\.|[^'\\\\])*)'\\s*\\|\\s*translate(?:.*)" + escapeRegExp(interpolation.endDelimiter), "gi"),
-      HtmlFilterDoubleQuote: new RegExp(escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\])*)"\\s*\\|\\s*translate(?:.*)' + escapeRegExp(interpolation.endDelimiter), "gi"),
-      // Match: <span translate="TRANSLATION_KEY" angular-plural-extract="['TEXT FOR ONE','# TEXT FOR OTHER']" translate-values="{NB: X}" translate-interpolation="messageformat"></span>
-      HtmlDirectivePlural: /translate=\"((?:\\.|[^"\\])*)\".*angular-plural-extract=\"((?:\\.|[^"\\])*)\"/gi,
-      // Match: <a href="#" translate>TRANSLATION</a>
-      HtmlDirective: /<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>/gi,
-      // Match: $translate('TRANSLATION')
-      JavascriptService: /\$translate\([^'"]['"]([^'"]*)['"][^'"]*\)/gi,
-      // Match: $filter("translate")("TRANSLATION")
-      JavascriptFilter: /\$filter\(\s*['"]translate['"]\s*\)\s*\(\s*['"](.*[\S].*)['"]\s*\)/gi
+      HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
+      HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
+      HtmlDirective: '<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>',
+      HtmlDirectivePluralLast: 'translate="((?:\\\\.|[^"\\\\])*)".*angular-plural-extract="((?:\\\\.|[^"\\\\])*)"',
+      HtmlDirectivePluralFirst: 'angular-plural-extract="((?:\\\\.|[^"\\\\])*)".*translate="((?:\\\\.|[^"\\\\])*)"',
+      JavascriptServiceSimpleQuote: '\\$translate\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
+      JavascriptServiceDoubleQuote: '\\$translate\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
+      JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
+      JavascriptFilterDoubleQuote: '\\$filter\\(\\s*"translate"\\s*\\)\\s*\\(\\s*"((?:\\\\.|[^"\\\\\])*)"[^\\)]*\\)'
     };
 
     // Check directory exist
@@ -67,34 +101,38 @@ module.exports = function (grunt) {
     files.forEach(function (file) {
 
       _log.debug("Process file: " + file);
-      var content = _file.read(file), r;
+      var content = _file.read(file), _regex, r;
 
       // Execute all regex defined at the top of this file
       for (var i in regexs) {
-
-        while ((r = regexs[i].exec(content)) !== null) {
-          // Result expected [STRING, KEY, SOME_REGEX_STUF]
-          // Except for plural hack [STRING, KEY, ARRAY_IN_STRING]
-          if (r.length >= 2) {
-            var translationKey = _(r[1]).strip();
-            var translationDefaultValue = "";
-
-            // Avoid emptu translation
-            if (translationKey === "") {
-              return;
-            }
-
-            // Particular case for plural
-            // Build default key by attribute in HTML code
-            if (i == "HtmlDirectivePlural") {
-              var evalString = eval(r[2]);
-              if (_.isArray(evalString) && evalString.length >= 2) {
-                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+        _regex = new RegExp(regexs[i], "gi");
+        switch (i) {
+          // Case filter HTML simple/double quoted
+          case "HtmlFilterSimpleQuote":
+          case "HtmlFilterDoubleQuote":
+          case "HtmlDirective":
+          case "HtmlDirectivePluralLast":
+          case "HtmlDirectivePluralFirst":
+          case "JavascriptFilterSimpleQuote":
+          case "JavascriptFilterDoubleQuote":
+            // Match all occurences
+            var matches = content.match(_regex);
+            if (_.isArray(matches) && matches.length) {
+              // Through each matches, we'll execute regex to get translation key
+              for (var index in matches) {
+                if (matches[index] !== "") {
+                  _extractTranslation(i, _regex, matches[index], results);
+                }
               }
+
             }
-            results[ translationKey ] = translationDefaultValue;
-          }
+            break;
+          // Others regex
+          default:
+            _extractTranslation(i, _regex, content, results);
+
         }
+
       }
 
     });

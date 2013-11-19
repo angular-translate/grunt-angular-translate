@@ -1,10 +1,13 @@
 {
-    "My first translate": "Ma première traduction",
-    "My second translate": "",
-    "Click here": "",
-    "if the download does not start automatically.": "",
-    "My third translate": "",
-    "TRANSLATION_ID": "",
-    "TRANSLATION_KEY": "{NB, plural, one{TEXT FOR ONE} other{# TEXT FOR OTHER}",
-    "mySuffix ---": "waou : "
+    "HtmlFilterDoubleQuote{} interp\\\"olation {{xx}}": "My interpolation translation",
+    "HtmlFilterDoubleQuote{} {{var}}on same line 1/2": "",
+    "HtmlFilterDoubleQuote{} on same line 2/2": "",
+    "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô": "My directive translation",
+    "HtmlDirective 2/2": "",
+    "HtmlDirectivePluralFirst": "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}",
+    "HtmlDirectivePluralSecond": "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}",
+    "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": "",
+    "JavascriptServiceDoubleQuote 2/2 with var \\\"{name}\\\".": "",
+    "JavascriptFilter 1/2 with var \"{name}\"": "my {name} javascript filter",
+    "JavascriptFilter 2/2 without var": ""
 }

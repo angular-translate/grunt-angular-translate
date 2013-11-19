@@ -1,28 +1,17 @@
-angular.module( 'titleService', [])
+angular.module('titleService', [])
 
-.factory( 'titleService', function ( $document, $translate ) {
-  var suffix = $translate( 'mySuffix ---' ),
-      title;
-  
-  var titleService = {
-    setSuffix: function setSuffix ( s ) {
-      suffix = s;
-    },
-    getSuffix: function getSuffix () {
-      return suffix;
-    },
-    setTitle: function setTitle ( t ) {
-      title = t + suffix;
+  .factory('titleService', function ($document, $filter, $translate) {
+    $filter('translate')('JavascriptFilter 1/2 with var "{name}"', {name: 'name'});
+    $filter('translate')('JavascriptFilter 2/2 without var');
 
-      $document.prop( 'title', title );
-    },
-    getTitle: function getTitle () {
-      return $document.prop( 'title' );
-    }
-  };
+    $translate('JavascriptServiceSimpleQuote 1/2 with var "{name}".', {name: 'name'});
+    $translate("JavascriptServiceDoubleQuote 2/2 with var \"{name}\".", {name: 'name'});
 
-  return titleService;
-})
+    var titleService = {
+    };
+
+    return titleService;
+  })
 
 ;
 
