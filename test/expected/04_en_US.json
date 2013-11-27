@@ -1,5 +1,5 @@
 {
-    "HtmlFilterDoubleQuote{} interp\\\"olation {{xx}}": "HtmlFilterDoubleQuote{} interp\\\"olation {{xx}}",
+    "HtmlFilterDoubleQuote{} interp\"olation {{xx}}": "HtmlFilterDoubleQuote{} interp\"olation {{xx}}",
     "HtmlFilterDoubleQuote{} {{var}}on same line 1/2": "HtmlFilterDoubleQuote{} {{var}}on same line 1/2",
     "HtmlFilterDoubleQuote{} on same line 2/2": "HtmlFilterDoubleQuote{} on same line 2/2",
     "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô": "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô",
@@ -7,7 +7,7 @@
     "HtmlDirectivePluralFirst": "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}",
     "HtmlDirectivePluralSecond": "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}",
     "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".",
-    "JavascriptServiceDoubleQuote 2/2 with var \\\"{name}\\\".": "JavascriptServiceDoubleQuote 2/2 with var \\\"{name}\\\".",
+    "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".",
     "JavascriptFilter 1/2 with var \"{name}\"": "JavascriptFilter 1/2 with var \"{name}\"",
     "JavascriptFilter 2/2 without var": "JavascriptFilter 2/2 without var"
 }
