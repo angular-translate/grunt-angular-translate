@@ -69,11 +69,23 @@ module.exports = function (grunt) {
               translationKey = _(r[1]).strip();
           }
 
-          // Avoid emptu translation
+          // Avoid empty translation
           if (translationKey === "") {
             return;
           }
 
+          switch (regexName) {
+            case "HtmlFilterSimpleQuote":
+            case "JavascriptServiceSimpleQuote":
+            case "JavascriptFilterSimpleQuote":
+              translationKey = translationKey.replace(/\\\'/g, "'");
+              break;
+            case "HtmlFilterDoubleQuote":
+            case "JavascriptServiceDoubleQuote":
+            case "JavascriptFilterDoubleQuote":
+              translationKey = translationKey.replace(/\\\"/g, '"');
+              break;
+          }
           results[ translationKey ] = translationDefaultValue;
         }
       }
@@ -197,6 +209,7 @@ module.exports = function (grunt) {
         json = _file.readJSON(filename);
         _.extend((translations = _.clone(results) ), json);
       }
+
       // Make some stats
 
       for (var k in translations) {
