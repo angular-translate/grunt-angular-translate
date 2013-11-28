@@ -6,6 +6,7 @@
     "HtmlDirective 2/2": "",
     "HtmlDirectivePluralFirst": "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}",
     "HtmlDirectivePluralSecond": "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}",
+    "HtmlNgBindHtml Key ' 1/1": "",
     "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": "",
     "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": "",
     "JavascriptFilter 1/2 with var \"{name}\"": "",
