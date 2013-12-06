@@ -55,6 +55,16 @@ Example: `[ 'src/**/*.js' ]`
 
 Define a file list to parse for extract translation.
 
+#### interpolation
+
+Type: `Object`
+Default: `{ startDelimiter: '{{', endDelimiter: '}}' }`
+
+Example: `{ startDelimiter: '[[', endDelimiter: ']]' }`
+
+Define interpolation symbol use for your angular application.
+The angulars docs about ($interpolateProvider)[http://docs.angularjs.org/api/ng.$interpolateProvider] explain how you can configure the interpolation markup.
+
 #### jsonSrc
 
 Type: `Array`
