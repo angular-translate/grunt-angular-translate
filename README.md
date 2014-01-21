@@ -1,5 +1,7 @@
 # grunt-angular-translate
 
+** This project was moved into angular-translate organization **
+
 Extract all the translation keys for angular-translate project
 
 ## Getting Started
