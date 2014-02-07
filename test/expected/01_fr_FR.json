@@ -1,14 +1,16 @@
 {
-    "HtmlFilterDoubleQuote{} interp\"olation {{xx}}": "",
-    "HtmlFilterDoubleQuote{} {{var}}on same line 1/2": "",
-    "HtmlFilterDoubleQuote{} on same line 2/2": "",
+    "HtmlFilterDoubleQuote{} interp\"olation {{xx}}": null,
+    "HtmlFilterDoubleQuote{} {{var}}on same line 1/2": null,
+    "HtmlFilterDoubleQuote{} on same line 2/2": null,
     "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô": "My directive translation",
-    "HtmlDirective 2/2": "",
+    "HtmlDirective 2/2": null,
+    "SUB.NAMESPACE 1.0": null,
+    "SUB.NAMESPACE 1.2": null,
     "HtmlDirectivePluralFirst": "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}",
     "HtmlDirectivePluralSecond": "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}",
-    "HtmlNgBindHtml Key ' 1/1": "",
-    "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": "",
-    "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": "",
+    "HtmlNgBindHtml Key ' 1/1": null,
+    "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": null,
+    "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": null,
     "JavascriptFilter 1/2 with var \"{name}\"": "my {name} javascript filter",
-    "JavascriptFilter 2/2 without var": ""
+    "JavascriptFilter 2/2 without var": null
 }

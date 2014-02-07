@@ -30,6 +30,7 @@ module.exports = function (grunt) {
       defaultLang = this.data.defaultLang || '.',
       interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
       source = this.data.source || '',
+      nullEmpty = this.data.nullEmpty || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
@@ -226,6 +227,10 @@ module.exports = function (grunt) {
           if (lang === defaultLang) {
             translations[ k ] = k;
           } else {
+            // Test if option to set empty to null
+            if (nullEmpty) {
+              translations[ k ] = null;
+            }
             nbEmpty++;
           }
         }
