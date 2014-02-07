@@ -19,14 +19,15 @@
     "grunt-contrib-nodeunit": "~0.1.2",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-copy": "~0.4.1",
-    "grunt": "~0.4.0"
+    "grunt": "~0.4.0",
+    "grunt-markdox": "~0.1.0"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/firehist/grunt-angular-translate.git"
+    "url": "git://github.com/angular-translate/grunt-angular-translate.git"
   },
   "keywords": [
     "AngularJS",
@@ -40,7 +41,7 @@
   ],
   "author": "Benjamin Longearet",
   "bugs": {
-    "url": "https://github.com/firehist/grunt-angular-translate/issues"
+    "url": "https://github.com/angular-translate/grunt-angular-translate/issues"
   },
   "licenses": [
     {

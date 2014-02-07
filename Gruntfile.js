@@ -66,6 +66,7 @@ module.exports = function(grunt) {
       default_exists_i18n : {
         prefix:   '01_',
         suffix:   '.json',
+        nullEmpty: true,
         src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
         lang:     ['fr_FR'],
         dest:     'tmp',
@@ -118,6 +119,14 @@ module.exports = function(grunt) {
     // Unit tests.
     nodeunit: {
       tests: ['test/*_test.js']
+    },
+
+    markdox: {
+      all: {
+        files: [
+          {src: 'tasks/*.js', dest: 'DOCUMENTATION.md'}
+        ]
+      }
     }
 
   });
@@ -131,6 +140,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-markdox');
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
