@@ -50,5 +50,8 @@
     }
   ],
   "gitHead": "dd655f85e3b4c59b7f3ac5ebf3f1ccad69876bb8",
-  "readmeFilename": "README.md"
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "lodash": "~2.4.1"
+  }
 }

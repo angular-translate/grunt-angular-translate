@@ -1,0 +1,9 @@
+{
+  "SUB": {
+    "NAMESPACE": {
+      "VAL 1": "My default SUB.NAMESPACE.VAL 1",
+      "VAL 2": "Waouhh!"
+    },
+    "NS": ""
+  }
+}

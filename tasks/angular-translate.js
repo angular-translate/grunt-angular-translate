@@ -13,7 +13,7 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('i18nextract', 'Generate json language file(s) for angular-translate project', function () {
 
     // Shorcuts!
-    var _ = grunt.util._;
+    var _ = require('lodash');
     var _log = grunt.log;
     var _file = grunt.file;
 
@@ -31,6 +31,7 @@ module.exports = function (grunt) {
       interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
       source = this.data.source || '',
       nullEmpty = this.data.nullEmpty || false,
+      namespace = this.data.namespace || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
@@ -64,10 +65,10 @@ module.exports = function (grunt) {
               if (_.isArray(evalString) && evalString.length >= 2) {
                 translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
               }
-              translationKey = _(r[1]).strip();
+              translationKey = r[1].trim();
               break;
             default:
-              translationKey = _(r[1]).strip();
+              translationKey = r[1].trim();
           }
 
           // Avoid empty translation
@@ -88,7 +89,49 @@ module.exports = function (grunt) {
               translationKey = translationKey.replace(/\\\"/g, '"');
               break;
           }
-          results[ translationKey ] = translationDefaultValue;
+
+          // Case sub namespace!
+          if (namespace && translationKey.indexOf('.') !== -1) {
+            // Save translation key with point
+            var fullTranslationKey = translationKey;
+            // Split translation key by point
+            var splitted = translationKey.split('.');
+            var isValidNamespace = splitted.length > 1;
+            // Check if valid namespace (avoid endpoint ad empty part)
+            for (var i in splitted) {
+              isValidNamespace = (splitted[ i ] != "");
+            }
+            // Get default value
+            var curObj, obj = translationDefaultValue;
+            if (isValidNamespace) {
+              // Remove first one
+              translationKey = splitted[0];
+              splitted.splice(0,1);
+              // Build sub namespace
+              var curObj = obj = {};
+
+              var curDefault = translationKey;
+              for (var index in splitted) {
+
+                if (splitted.length - 1 == index) {
+                  curObj[ splitted[ index ] ] = translationDefaultValue;
+                } else {
+                  if (results[translationKey] && results[translationKey][ splitted[ index ] ]) {
+                    curObj[ splitted[ index ] ] = _.extend({}, results[translationKey][ splitted[ index ] ]);
+                  } else {
+                    curObj[ splitted[ index ] ] = _.extend({}, curObj[ splitted[ index ] ]);
+                  }
+                  curObj = curObj[ splitted[ index ] ];
+                }
+              }
+              results[ translationKey ] = _.extend({}, results[translationKey], obj);
+            } else {
+              results[ translationKey ] = translationDefaultValue;
+            }
+          } else {
+            results[ translationKey ] = translationDefaultValue;
+          }
+
         }
       }
     };
@@ -175,13 +218,40 @@ module.exports = function (grunt) {
       return currentArray;
     };
 
+    /**
+     * Recurse feed translation object (utility for namespace)
+     * INPUT: {"NS1": {"NS2": {"VAL1": "", "VAL2": ""} } }
+     * OUTPUT: {"NS1": {"NS2": {"VAL1": "NS1.NS2.VAL1", "VAL2": "NS1.NS2.VAL2"} } }
+     * @param {Object} data
+     * @param {string?} path
+     * @private
+     */
+    var _recurseFeedDefaultNamespace = function (data, path) {
+      var path = path || '';
+      if (_.isObject(data)) {
+        for (var key in data) {
+          if (_.isObject(data)) {
+            data[ key ] = _recurseFeedDefaultNamespace(data[ key ], path != '' ? path + '.' + key : key);
+          }
+        }
+        return data;
+      } else {
+        if (data == null && data == "") {
+          // return default data if empty/null
+          return path;
+        } else {
+          return data;
+        }
+      }
+    };
+
     // Parse all extra files to extra
     jsonSrc.forEach(function (file) {
       _log.debug("Process extra file: " + file);
       var content = _file.readJSON(file);
       var recurseData = _recurseObject(content);
       for (var i in recurseData) {
-        results[ _(recurseData[i]).strip() ] = '';
+        results[ recurseData[i].trim() ] = '';
       }
     });
 
@@ -204,23 +274,46 @@ module.exports = function (grunt) {
 
       _log.subhead('Process ' + lang + ' : ' + filename);
 
+
       if (!_file.exists(filename)) {
         _log.debug('File doesn\'t exist');
-        translations = results;
+        translations = _.cloneDeep(results);
       } else {
         _log.debug('File exist');
         json = _file.readJSON(filename);
-        _.extend((translations = _.clone(results) ), json);
+        // Extend data if no namespace
+        if (!namespace) {
+          _.extend((translations = _.cloneDeep(results) ), json);
+        } else {
+          // Merge recursively objDest into objSrc
+          var _recurseExtend = function (objSrc, objDest) {
+            if (_.isObject(objDest)) {
+              Object.getOwnPropertyNames(objDest).forEach(function(index) {
+                if (_.isObject( objDest[ index ])) {
+                  objDest[index] = _recurseExtend(objSrc[index], objDest[index]);
+                } else {
+                  objDest[index] = objSrc && objSrc[index] ? objSrc[ index ] : "";
+                }
+              });
+            }
+            return _.cloneDeep(objDest);
+          };
+          translations = _recurseExtend(json, _.cloneDeep(results));
+        }
       }
 
       // Make some stats
-
       for (var k in translations) {
         var translation = translations[k];
         var isJson = _.isString(json[k]);
         var isResults = _.isString(results[k]);
 
         nbTra++;
+
+        // Case namespace
+        if (namespace && _.isObject(translation) && lang === defaultLang) {
+          translations[ k ] = _recurseFeedDefaultNamespace(translations[ k ]);
+        }
 
         // Case empty translation
         if (translation === '') {
