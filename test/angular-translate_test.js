@@ -68,6 +68,40 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  sub_namespace: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/06_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/06_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
+  sub_namespace_default_language: function(test) {
+    test.expect(2);
+
+    var actual = grunt.file.read( 'tmp/07_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/07_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    var actual = grunt.file.read( 'tmp/07_en_US.json' );
+    var expected = grunt.file.read( 'test/expected/07_en_US.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
+  sub_namespace_default_language_source: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/08_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/08_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };

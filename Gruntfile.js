@@ -112,6 +112,44 @@ module.exports = function(grunt) {
         lang:     ['en_US'],
         dest:     'tmp',
         defaultLang: 'en_US'
+      },
+
+      sub_namespace: {
+        prefix:   '06_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace.html' ],
+        lang:     ['fr_FR'],
+        namespace: true,
+        dest:     'tmp'
+      },
+
+      /**
+       * Test case: Feed
+       */
+      sub_namespace_default_language: {
+        prefix:   '07_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace.html' ],
+        lang:     ['fr_FR', 'en_US'],
+        defaultLang: 'fr_FR',
+        nullEmpty: true,
+        namespace: true,
+        dest:     'tmp'
+      },
+
+      /**
+       * Test case: Feed
+       */
+      sub_namespace_default_language_source: {
+        prefix:   '08_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace.html' ],
+        lang:     ['fr_FR'],
+        defaultLang: 'fr_FR',
+        nullEmpty: true,
+        namespace: true,
+        dest:     'tmp',
+        source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
       }
 
     },
