@@ -41,6 +41,47 @@ module.exports = function (grunt) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
+    var _convertFlatJson2NamespaceJson = function (objSrc, translationKey, translationDefaultValue) {
+      if (translationKey.indexOf('.') !== -1) {
+        // Split translation key by point
+        var splitted = translationKey.split('.');
+        var isValidNamespace = splitted.length > 1;
+        // Check if valid namespace (avoid endpoint ad empty part)
+        for (var i in splitted) {
+          isValidNamespace = isValidNamespace && (splitted[ i ] != "");
+        }
+        // Get default value
+        var obj = translationDefaultValue;
+        if (isValidNamespace) {
+          // Remove first one
+          translationKey = splitted[0];
+          splitted.splice(0,1);
+          // Build sub namespace
+          var curObj = obj = {};
+
+          for (var index in splitted) {
+
+            if (splitted.length - 1 == index) {
+              curObj[ splitted[ index ] ] = translationDefaultValue;
+            } else {
+              if (objSrc[translationKey] && objSrc[translationKey][ splitted[ index ] ]) {
+                curObj[ splitted[ index ] ] = _.extend({}, objSrc[translationKey][ splitted[ index ] ]);
+              } else {
+                curObj[ splitted[ index ] ] = _.extend({}, curObj[ splitted[ index ] ]);
+              }
+              curObj = curObj[ splitted[ index ] ];
+            }
+          }
+          objSrc[ translationKey ] = _.extend({}, objSrc[translationKey], obj);
+        } else {
+          objSrc[ translationKey ] = translationDefaultValue;
+        }
+      } else {
+        objSrc[ translationKey ] = translationDefaultValue;
+      }
+      return objSrc;
+    };
+
     var _extractTranslation = function (regexName, regex, content, results) {
       var r;
       _log.debug("---------------------------------------------------------------------------------------------------");
@@ -90,44 +131,8 @@ module.exports = function (grunt) {
               break;
           }
 
-          // Case sub namespace!
-          if (namespace && translationKey.indexOf('.') !== -1) {
-            // Save translation key with point
-            var fullTranslationKey = translationKey;
-            // Split translation key by point
-            var splitted = translationKey.split('.');
-            var isValidNamespace = splitted.length > 1;
-            // Check if valid namespace (avoid endpoint ad empty part)
-            for (var i in splitted) {
-              isValidNamespace = (splitted[ i ] != "");
-            }
-            // Get default value
-            var curObj, obj = translationDefaultValue;
-            if (isValidNamespace) {
-              // Remove first one
-              translationKey = splitted[0];
-              splitted.splice(0,1);
-              // Build sub namespace
-              var curObj = obj = {};
-
-              var curDefault = translationKey;
-              for (var index in splitted) {
-
-                if (splitted.length - 1 == index) {
-                  curObj[ splitted[ index ] ] = translationDefaultValue;
-                } else {
-                  if (results[translationKey] && results[translationKey][ splitted[ index ] ]) {
-                    curObj[ splitted[ index ] ] = _.extend({}, results[translationKey][ splitted[ index ] ]);
-                  } else {
-                    curObj[ splitted[ index ] ] = _.extend({}, curObj[ splitted[ index ] ]);
-                  }
-                  curObj = curObj[ splitted[ index ] ];
-                }
-              }
-              results[ translationKey ] = _.extend({}, results[translationKey], obj);
-            } else {
-              results[ translationKey ] = translationDefaultValue;
-            }
+          if (namespace) {
+            results = _convertFlatJson2NamespaceJson(results, translationKey, translationDefaultValue);
           } else {
             results[ translationKey ] = translationDefaultValue;
           }
@@ -285,12 +290,15 @@ module.exports = function (grunt) {
         if (!namespace) {
           _.extend((translations = _.cloneDeep(results) ), json);
         } else {
+          _log.debug('namespace: ON');
           // Merge recursively objDest into objSrc
           var _recurseExtend = function (objSrc, objDest) {
             if (_.isObject(objDest)) {
               Object.getOwnPropertyNames(objDest).forEach(function(index) {
                 if (_.isObject( objDest[ index ])) {
-                  objDest[index] = _recurseExtend(objSrc[index], objDest[index]);
+                  if (!_.isUndefined(objSrc[index])) {
+                    objDest[index] = _recurseExtend(objSrc[index], objDest[index]) || "";
+                  }
                 } else {
                   objDest[index] = objSrc && objSrc[index] ? objSrc[ index ] : "";
                 }
@@ -298,7 +306,13 @@ module.exports = function (grunt) {
             }
             return _.cloneDeep(objDest);
           };
-          translations = _recurseExtend(json, _.cloneDeep(results));
+          // Split namespace inline translationKey if exist
+          var objSrcSplitted = {};
+          _.forEach(json, function (translationVal,translationKey) {
+            objSrcSplitted = _convertFlatJson2NamespaceJson(objSrcSplitted, translationKey, translationVal);
+          });
+          // Process translations merge/extend
+          translations = _recurseExtend(objSrcSplitted, _.cloneDeep(results));
         }
       }
 

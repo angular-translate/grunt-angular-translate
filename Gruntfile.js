@@ -150,6 +150,21 @@ module.exports = function(grunt) {
         namespace: true,
         dest:     'tmp',
         source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
+      },
+
+      /**
+       * Test case: Feed
+       */
+      sub_namespace_default_language_source_mix: {
+        prefix:   '09_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace.html' ],
+        lang:     ['fr_FR'],
+        defaultLang: 'fr_FR',
+        nullEmpty: true,
+        namespace: true,
+        dest:     'tmp',
+        source:   'test/fixtures/default_exists_i18n_nonamespace.json' // Use to generate different output file
       }
 
     },
