@@ -48,6 +48,19 @@ This extraction is made to work with the [angular-translate][angular_translate] 
 
 Options src and jsonSrc may be specified according to the grunt Configuring tasks guide.
 
+- [src](#src)
+- [nullEmpty](#nullempty-v026)
+- [namespace](#namespace-v026)
+- [interpolation](#interpolation)
+- [jsonSrc](#jsonSrc)
+- [jsonSrcName](#jsonSrcName)
+- [defaultLang](#defaultLang)
+- [lang](#lang)
+- [prefix](#prefix)
+- [suffix](#suffix)
+- [dest](#dest)
+- [safeMode](#safeMode)
+
 #### src
 
 Type: `Array`
@@ -56,6 +69,35 @@ Default: `undefined`
 Example: `[ 'src/**/*.js' ]`
 
 Define a file list to parse for extract translation.
+
+#### nullEmpty (v0.2.6)
+
+Type: `Boolean`
+Default: `false`
+
+Example: `true`
+
+If set to true, it will replace all final empty translations by *null* value.
+
+#### namespace (v0.2.6)
+
+Type: `Boolean`
+Default: `false`
+
+Example: `true`
+
+If set to true, it will organize output JSON like the following.
+`````
+{
+  "MODULE": {
+    "CATEGORY": {
+      "TITLE": "My Title",
+      "TITLE1": null
+    }
+  }
+}
+`````
+
 
 #### interpolation
 
