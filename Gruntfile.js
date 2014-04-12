@@ -146,6 +146,7 @@ module.exports = function(grunt) {
         src:      [ 'test/fixtures/index_namespace.html' ],
         lang:     ['fr_FR'],
         defaultLang: 'fr_FR',
+        safeMode: true,
         nullEmpty: true,
         namespace: true,
         dest:     'tmp',
