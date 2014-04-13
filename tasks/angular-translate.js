@@ -13,11 +13,12 @@ module.exports = function (grunt) {
   grunt.registerMultiTask('i18nextract', 'Generate json language file(s) for angular-translate project', function () {
 
     // Shorcuts!
+    var Translations = require('./lib/translations.js');
     var _ = require('lodash');
     var _log = grunt.log;
     var _file = grunt.file;
 
-
+    // Check lang parameter
     if (!_.isArray(this.data.lang) || !this.data.lang.length) {
       grunt.fail('lang parameter is required.');
     }
@@ -37,10 +38,12 @@ module.exports = function (grunt) {
       suffix = this.data.suffix || '.json',
       results = {};
 
+    // Use to escape some char into regex patterns
     var escapeRegExp = function (str) {
       return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
     }
 
+    // Extract regex strings from content and feed results object
     var _extractTranslation = function (regexName, regex, content, results) {
       var r;
       _log.debug("---------------------------------------------------------------------------------------------------");
@@ -89,49 +92,7 @@ module.exports = function (grunt) {
               translationKey = translationKey.replace(/\\\"/g, '"');
               break;
           }
-
-          // Case sub namespace!
-          if (namespace && translationKey.indexOf('.') !== -1) {
-            // Save translation key with point
-            var fullTranslationKey = translationKey;
-            // Split translation key by point
-            var splitted = translationKey.split('.');
-            var isValidNamespace = splitted.length > 1;
-            // Check if valid namespace (avoid endpoint ad empty part)
-            for (var i in splitted) {
-              isValidNamespace = (splitted[ i ] != "");
-            }
-            // Get default value
-            var curObj, obj = translationDefaultValue;
-            if (isValidNamespace) {
-              // Remove first one
-              translationKey = splitted[0];
-              splitted.splice(0,1);
-              // Build sub namespace
-              var curObj = obj = {};
-
-              var curDefault = translationKey;
-              for (var index in splitted) {
-
-                if (splitted.length - 1 == index) {
-                  curObj[ splitted[ index ] ] = translationDefaultValue;
-                } else {
-                  if (results[translationKey] && results[translationKey][ splitted[ index ] ]) {
-                    curObj[ splitted[ index ] ] = _.extend({}, results[translationKey][ splitted[ index ] ]);
-                  } else {
-                    curObj[ splitted[ index ] ] = _.extend({}, curObj[ splitted[ index ] ]);
-                  }
-                  curObj = curObj[ splitted[ index ] ];
-                }
-              }
-              results[ translationKey ] = _.extend({}, results[translationKey], obj);
-            } else {
-              results[ translationKey ] = translationDefaultValue;
-            }
-          } else {
-            results[ translationKey ] = translationDefaultValue;
-          }
-
+          results[ translationKey ] = translationDefaultValue;
         }
       }
     };
@@ -149,51 +110,6 @@ module.exports = function (grunt) {
       JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptFilterDoubleQuote: '\\$filter\\(\\s*"translate"\\s*\\)\\s*\\(\\s*"((?:\\\\.|[^"\\\\\])*)"[^\\)]*\\)'
     };
-
-    // Check directory exist
-    if (!_file.exists(dest)) {
-      _file.mkdir(dest);
-    }
-
-    // Parse all files to extract translations with defined regex
-    files.forEach(function (file) {
-
-      _log.debug("Process file: " + file);
-      var content = _file.read(file), _regex, r;
-
-      // Execute all regex defined at the top of this file
-      for (var i in regexs) {
-        _regex = new RegExp(regexs[i], "gi");
-        switch (i) {
-          // Case filter HTML simple/double quoted
-          case "HtmlFilterSimpleQuote":
-          case "HtmlFilterDoubleQuote":
-          case "HtmlDirective":
-          case "HtmlDirectivePluralLast":
-          case "HtmlDirectivePluralFirst":
-          case "JavascriptFilterSimpleQuote":
-          case "JavascriptFilterDoubleQuote":
-            // Match all occurences
-            var matches = content.match(_regex);
-            if (_.isArray(matches) && matches.length) {
-              // Through each matches, we'll execute regex to get translation key
-              for (var index in matches) {
-                if (matches[index] !== "") {
-                  _extractTranslation(i, _regex, matches[index], results);
-                }
-              }
-
-            }
-            break;
-          // Others regex
-          default:
-            _extractTranslation(i, _regex, content, results);
-
-        }
-
-      }
-
-    });
 
     /**
      * Recurse an object to retrieve as an array all the value of named parameters
@@ -240,10 +156,59 @@ module.exports = function (grunt) {
           // return default data if empty/null
           return path;
         } else {
+
           return data;
         }
       }
     };
+
+    /**
+     * Start extraction of translations
+     */
+
+    // Check directory exist
+    if (!_file.exists(dest)) {
+      _file.mkdir(dest);
+    }
+
+    // Parse all files to extract translations with defined regex
+    files.forEach(function (file) {
+
+      _log.debug("Process file: " + file);
+      var content = _file.read(file), _regex;
+
+      // Execute all regex defined at the top of this file
+      for (var i in regexs) {
+        _regex = new RegExp(regexs[i], "gi");
+        switch (i) {
+          // Case filter HTML simple/double quoted
+          case "HtmlFilterSimpleQuote":
+          case "HtmlFilterDoubleQuote":
+          case "HtmlDirective":
+          case "HtmlDirectivePluralLast":
+          case "HtmlDirectivePluralFirst":
+          case "JavascriptFilterSimpleQuote":
+          case "JavascriptFilterDoubleQuote":
+            // Match all occurences
+            var matches = content.match(_regex);
+            if (_.isArray(matches) && matches.length) {
+              // Through each matches, we'll execute regex to get translation key
+              for (var index in matches) {
+                if (matches[index] !== "") {
+                  _extractTranslation(i, _regex, matches[index], results);
+                }
+              }
+
+            }
+            break;
+          // Others regex
+          default:
+            _extractTranslation(i, _regex, content, results);
+
+        }
+      }
+
+    });
 
     // Parse all extra files to extra
     jsonSrc.forEach(function (file) {
@@ -255,16 +220,19 @@ module.exports = function (grunt) {
       }
     });
 
+    // Create translation object
+    var _translation = new Translations({
+      "safeMode": safeMode,
+      "tree": namespace,
+      "nullEmpty": nullEmpty
+    }, results);
+
     // Build all output langage files
     this.data.lang.forEach(function (lang) {
 
       var destFilename = dest + '/' + prefix + lang + suffix,
         filename = source,
         translations = {},
-        nbTra = 0,
-        nbEmpty = 0,
-        nbNew = 0,
-        nbDel = 0,
         json = {};
 
       // Test source filename
@@ -274,84 +242,33 @@ module.exports = function (grunt) {
 
       _log.subhead('Process ' + lang + ' : ' + filename);
 
-
       if (!_file.exists(filename)) {
         _log.debug('File doesn\'t exist');
-        translations = _.cloneDeep(results);
+
+        var isDefaultLang = (defaultLang === lang);
+        _log.writeln('Create file: ' + destFilename + (isDefaultLang ? ' (' + lang + ' is the default language)' : ''));
+        translations = _translation.getMergedTranslations({}, isDefaultLang);
+
       } else {
         _log.debug('File exist');
         json = _file.readJSON(filename);
-        // Extend data if no namespace
-        if (!namespace) {
-          _.extend((translations = _.cloneDeep(results) ), json);
-        } else {
-          // Merge recursively objDest into objSrc
-          var _recurseExtend = function (objSrc, objDest) {
-            if (_.isObject(objDest)) {
-              Object.getOwnPropertyNames(objDest).forEach(function(index) {
-                if (_.isObject( objDest[ index ])) {
-                  objDest[index] = _recurseExtend(objSrc[index], objDest[index]);
-                } else {
-                  objDest[index] = objSrc && objSrc[index] ? objSrc[ index ] : "";
-                }
-              });
-            }
-            return _.cloneDeep(objDest);
-          };
-          translations = _recurseExtend(json, _.cloneDeep(results));
-        }
+        translations = _translation.getMergedTranslations(Translations.flatten(json));
       }
 
-      // Make some stats
-      for (var k in translations) {
-        var translation = translations[k];
-        var isJson = _.isString(json[k]);
-        var isResults = _.isString(results[k]);
+      var stats = _translation.getStats();
+      var statEmptyType = nullEmpty ? "null" : "empty";
+      var statsString = "Statistics : " +
+        statEmptyType + ": " + stats[statEmptyType] + " (" + Math.round(stats[statEmptyType] / stats["total"] * 100) + "%)" +
+        " / Updated: " + stats["updated"] +
+        " / Deleted: " + stats["deleted"] +
+        " / New: " + stats["new"];
 
-        nbTra++;
+      _log.writeln(statsString);
 
-        // Case namespace
-        if (namespace && _.isObject(translation) && lang === defaultLang) {
-          translations[ k ] = _recurseFeedDefaultNamespace(translations[ k ]);
-        }
-
-        // Case empty translation
-        if (translation === '') {
-          if (lang === defaultLang) {
-            translations[ k ] = k;
-          } else {
-            // Test if option to set empty to null
-            if (nullEmpty) {
-              translations[ k ] = null;
-            }
-            nbEmpty++;
-          }
-        }
-        // Case new translation (exist into src files but not in json file)
-        if (!isJson && isResults) {
-          nbNew++;
-        }
-        // Case deleted translation (exist in json file but not into src files)
-        if (isJson && !isResults) {
-          nbDel++;
-          if (!safeMode) {
-            delete translations[ k ];
-          }
-        }
-      };
-      // Some information for the output
-      if (!_file.exists(destFilename)) {
-        _log.subhead('Create file: ' + destFilename);
-      }
-
-      _log.writeln('Empty: ' + nbEmpty + ' (' + Math.round(nbEmpty / nbTra * 100) + '%) / New: ' + nbNew + ' / Deleted: ' + nbDel);
       // Write JSON file for lang
       _file.write(destFilename, JSON.stringify(translations, null, 4));
 
     });
-
-    var nbLang = this.data.lang.length || 0;
-    _log.ok(nbLang + ' file' + (nbLang ? 's' : '') + ' updated');
 
   });
 
