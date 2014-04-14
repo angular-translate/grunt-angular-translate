@@ -88,6 +88,13 @@ Translations.prototype.getMergedTranslations = function (obj, useDefault) {
   // Case safeMode: Dont delete unused value if true
   if (this.params.safeMode) {
     _returnTranslations = _.extend(_translations, obj);
+    _.forEach(_returnTranslations, function (v, k) {
+      if (__isValidTranslation(v)) {
+        _returnTranslations[k] = v;
+      } else {
+        _returnTranslations[k] = self.params.nullEmpty ? null : "";
+      }
+    });
   } else {
     _returnTranslations = {};
     _.forEach(_translations, function (v, k) {
@@ -96,7 +103,7 @@ Translations.prototype.getMergedTranslations = function (obj, useDefault) {
       } else if (__isValidTranslation(v)) {   // Get from extracted translations
         _returnTranslations[k] = v;
       } else {                                // Feed empty translation (null or "")
-        _returnTranslations[k] = self.params.nullEmpty ? null : ""
+        _returnTranslations[k] = self.params.nullEmpty ? null : "";
       }
     });
   }
