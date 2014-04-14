@@ -1,15 +1,15 @@
 {
     "SUB": {
         "NAMESPACE": {
-            "VAL 1": "",
-            "VAL 2": ""
+            "VAL 1": null,
+            "VAL 2": null
         },
         "NS": {
+            "VAL 2": null,
             "VAL 1": {
-                "test1": "",
-                "test 2": ""
-            },
-            "VAL 2": ""
+                "test1": null,
+                "test 2": null
+            }
         }
     }
 }
