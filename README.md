@@ -4,6 +4,9 @@
 
 Extract all the translation keys for angular-translate project
 
+##Status
+[![NPM](https://nodei.co/npm/grunt-angular-translate.png)](https://nodei.co/npm/grunt-angular-translate/)
+
 ## Getting Started
 Install this grunt plugin next to your project. Require [gruntJS][getting_started].
 
