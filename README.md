@@ -137,7 +137,7 @@ Default: `undefined`
 
 Example: `"en_US"`
 
-Define the default language. For default langage, by default the key will be set as value.
+Define the default language. For default language, by default the key will be set as value.
 
 #### lang
 
@@ -146,7 +146,7 @@ Default: `undefined`
 
 Example: `['fr_FR', 'en_US']`
 
-Define langage to be extract (fr__FR, en__US, xxx). xxx will be the output filename wrapped by prefix and suffix option.
+Define language to be extract (fr__FR, en__US, xxx). xxx will be the output filename wrapped by prefix and suffix option.
 
 #### prefix
 
