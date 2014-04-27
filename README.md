@@ -47,7 +47,23 @@ This extraction is made to work with the [angular-translate][angular_translate] 
 
 `$translate('TRANSLATION')`
 
-## Options
+## Configuration
+
+Simple configuration for `i18nextract` task
+
+```
+i18nextract: {
+  default_options: {
+    src: [ 'src/**/*.js', 'src/**/*.html' ],
+    lang:     ['fr_FR'],
+    dest:     'tmp'
+  }
+}
+```
+
+More examples in [Gruntfile.js](https://github.com/angular-translate/grunt-angular-translate/blob/master/Gruntfile.js)
+
+### Options
 
 Options src and jsonSrc may be specified according to the grunt Configuring tasks guide.
 
