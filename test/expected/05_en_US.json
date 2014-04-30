@@ -15,6 +15,8 @@
     "SUB.NS.VAL 1.test 2": "SUB.NS.VAL 1.test 2",
     "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".",
     "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".",
+    "JavascriptServiceInstantSimpleQuote 1/2 with var \"{name}\".": "JavascriptServiceInstantSimpleQuote 1/2 with var \"{name}\".",
+    "JavascriptServiceInstantDoubleQuote 2/2 with var \"{name}\".": "JavascriptServiceInstantDoubleQuote 2/2 with var \"{name}\".",
     "JavascriptFilter 1/2 with var \"{name}\"": "JavascriptFilter 1/2 with var \"{name}\"",
     "JavascriptFilter 2/2 without var": "JavascriptFilter 2/2 without var",
     "config:translation 00": "config:translation 00",
