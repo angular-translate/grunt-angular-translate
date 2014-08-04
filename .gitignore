@@ -3,3 +3,4 @@ npm-debug.log
 tmp
 !.empty
 .idea
+atlassian-ide-plugin.xml
