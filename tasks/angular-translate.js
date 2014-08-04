@@ -80,6 +80,7 @@ module.exports = function (grunt) {
           }
 
           switch (regexName) {
+            case "commentSimpleQuote":
             case "HtmlFilterSimpleQuote":
             case "JavascriptServiceSimpleQuote":
             case "JavascriptServiceInstantSimpleQuote":
@@ -87,6 +88,7 @@ module.exports = function (grunt) {
             case "HtmlNgBindHtml":
               translationKey = translationKey.replace(/\\\'/g, "'");
               break;
+            case "commentDoubleQuote":
             case "HtmlFilterDoubleQuote":
             case "JavascriptServiceDoubleQuote":
             case "JavascriptServiceInstantDoubleQuote":
@@ -101,6 +103,8 @@ module.exports = function (grunt) {
 
     // Regexs that will be executed on files
     var regexs = {
+      commentSimpleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/\'((?:\\\\.|[^\'\\\\])*)\'',
+      commentDoubleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/"((?:\\\\.|[^"\\\\])*)"',
       HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
       HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
       HtmlDirective: '<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>',

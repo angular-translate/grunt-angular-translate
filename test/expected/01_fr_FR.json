@@ -14,6 +14,8 @@
     "SUB.NS.VAL 2": null,
     "SUB.NS.VAL 1.test1": null,
     "SUB.NS.VAL 1.test 2": null,
+    "mySingleQ'uotedCommentTranslation '": null,
+    "myDoubleQuotedCommentTranslation \"e\"s\"": null,
     "JavascriptServiceSimpleQuote 1/2 with var \"{name}\".": null,
     "JavascriptServiceDoubleQuote 2/2 with var \"{name}\".": null,
     "JavascriptServiceInstantSimpleQuote 1/2 with var \"{name}\".": null,
