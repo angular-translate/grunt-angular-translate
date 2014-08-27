@@ -199,9 +199,6 @@ Translations.cleanParents = function (obj) {
       return (k < splitted.length - 1) ? m + '.' + v : m;
     });
     keepKeys.push(v);
-    _.remove(keepKeys, function (v) {
-      return v === splittedNS;
-    });
   });
   var cleanedObject = {};
   _.forEach(obj, function (v,k) {
