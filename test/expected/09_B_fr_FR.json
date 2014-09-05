@@ -6,24 +6,24 @@
     },
     "NS": {
       "VAL 1": {
-        "test 2": null,
-        "test1": null
+        "test 2": "SUB.NS.VAL 1.test 2",
+        "test1": "SUB.NS.VAL 1.test1"
       },
-      "VAL 2": null,
-      "vAL 0": null
+      "VAL 2": "SUB.NS.VAL 2",
+      "vAL 0": "SUB.NS.vAL 0"
     }
   },
   "all": {
     "tato": {
-      "tIiti": null,
-      "tZti": null,
-      "tati": null,
-      "tbti": null,
-      "tdti": null,
-      "tzti": null
+      "tIiti": "all.tato.tIiti",
+      "tZti": "all.tato.tZti",
+      "tati": "all.tato.tati",
+      "tbti": "all.tato.tbti",
+      "tdti": "all.tato.tdti",
+      "tzti": "all.tato.tzti"
     },
     "toto": {
-      "titi": null
+      "titi": "all.toto.titi"
     }
   }
 }

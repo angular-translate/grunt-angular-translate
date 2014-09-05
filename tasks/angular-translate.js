@@ -268,17 +268,17 @@ module.exports = function (grunt) {
 
       _log.subhead('Process ' + lang + ' : ' + filename);
 
+      var isDefaultLang = (defaultLang === lang);
       if (!_file.exists(filename)) {
         _log.debug('File doesn\'t exist');
-
-        var isDefaultLang = (defaultLang === lang);
+        
         _log.writeln('Create file: ' + destFilename + (isDefaultLang ? ' (' + lang + ' is the default language)' : ''));
         translations = _translation.getMergedTranslations({}, isDefaultLang);
 
       } else {
         _log.debug('File exist');
         json = _file.readJSON(filename);
-        translations = _translation.getMergedTranslations(Translations.flatten(json));
+        translations = _translation.getMergedTranslations(Translations.flatten(json), isDefaultLang);
       }
 
       var stats = _translation.getStats();
