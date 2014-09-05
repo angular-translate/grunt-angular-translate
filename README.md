@@ -79,6 +79,7 @@ Options src and jsonSrc may be specified according to the grunt Configuring task
 - [suffix](#suffix)
 - [dest](#dest)
 - [safeMode](#safeMode)
+- [stringifyOptions](#stringifyOptions)
 
 #### src
 
@@ -197,6 +198,14 @@ Type: `Boolean`
 Default: `false`
 
 If safeMode is set to `true` the deleted translations will stay in the output lang file.
+
+#### stringifyOptions
+
+Type: `Boolean` or `Object`
+Default: `false`
+
+If stringifyOptions is set to `true` the output will be sort (case insensitive).
+If stringifyOptions is an `object`, you can easily check [json-stable-stringify](https://github.com/substack/json-stable-stringify) README.
 
 ## Test
 

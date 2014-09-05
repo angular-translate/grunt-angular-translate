@@ -102,6 +102,26 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  consistent_stringify: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/09_A_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/09_A_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
+  consistent_stringify_options: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/09_B_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/09_B_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };

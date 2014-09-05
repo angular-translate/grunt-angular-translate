@@ -14,6 +14,7 @@ module.exports = function (grunt) {
 
     // Shorcuts!
     var Translations = require('./lib/translations.js');
+    var stringify = require('json-stable-stringify');
     var _ = require('lodash');
     var _log = grunt.log;
     var _file = grunt.file;
@@ -36,7 +37,23 @@ module.exports = function (grunt) {
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
+      stringify_options = this.data.stringifyOptions || null,
       results = {};
+
+    var customStringify = function (val) {
+      if (stringify_options) {
+        return stringify(val, _.isObject(stringify_options) ? stringify_options : {
+          space: '    ',
+          cmp: function (a, b) {
+            var lower = function (a) {
+              return a.toLowerCase();
+            };
+            return lower(a.key) < lower(b.key) ? -1 : 1;
+          }
+        });
+      }
+      return JSON.stringify(val, null, 4);
+    };
 
     // Use to escape some char into regex patterns
     var escapeRegExp = function (str) {
@@ -275,7 +292,7 @@ module.exports = function (grunt) {
       _log.writeln(statsString);
 
       // Write JSON file for lang
-      _file.write(destFilename, JSON.stringify(translations, null, 4));
+      _file.write(destFilename, customStringify(translations));
 
     });
 

@@ -151,6 +151,42 @@ module.exports = function(grunt) {
         namespace: true,
         dest:     'tmp',
         source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
+      },
+
+      /**
+       * Test case: Use consistent output to be able to merge easily
+       */
+      consistent_stringify: {
+        prefix:   '09_A_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace_consistent_output.html' ],
+        lang:     ['fr_FR'],
+        defaultLang: 'fr_FR',
+        safeMode: true,
+        nullEmpty: true,
+        namespace: true,
+        stringifyOptions: true,
+        dest:     'tmp',
+        source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
+      },
+
+      /**
+       * Test case: Use consistent output with options
+       */
+      consistent_stringify_options: {
+        prefix:   '09_B_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/index_namespace_consistent_output.html' ],
+        lang:     ['fr_FR'],
+        defaultLang: 'fr_FR',
+        safeMode: true,
+        nullEmpty: true,
+        namespace: true,
+        stringifyOptions: {
+          space: '  '
+        },
+        dest:     'tmp',
+        source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
       }
 
     },
@@ -186,6 +222,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'i18nextract', 'nodeunit', 'clean']);
 
   // By default, lint and run all tests.
-  grunt.registerTask('default', ['jshint', 'test']);
+  grunt.registerTask('default', ['test']);
 
 };
