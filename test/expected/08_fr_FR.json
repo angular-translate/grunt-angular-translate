@@ -5,10 +5,10 @@
             "VAL 2": "Waouhh!"
         },
         "NS": {
-            "VAL 2": null,
+            "VAL 2": "SUB.NS.VAL 2",
             "VAL 1": {
-                "test1": null,
-                "test 2": null
+                "test1": "SUB.NS.VAL 1.test1",
+                "test 2": "SUB.NS.VAL 1.test 2"
             }
         }
     }
