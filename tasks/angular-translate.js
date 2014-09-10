@@ -283,8 +283,10 @@ module.exports = function (grunt) {
 
       var stats = _translation.getStats();
       var statEmptyType = nullEmpty ? "null" : "empty";
+      var statPercentage =  Math.round(stats[statEmptyType] / stats["total"] * 100);
+      statPercentage = isNaN(statPercentage) ? 100 : statPercentage;
       var statsString = "Statistics : " +
-        statEmptyType + ": " + stats[statEmptyType] + " (" + Math.round(stats[statEmptyType] / stats["total"] * 100) + "%)" +
+        statEmptyType + ": " + stats[statEmptyType] + " (" + statPercentage + "%)" +
         " / Updated: " + stats["updated"] +
         " / Deleted: " + stats["deleted"] +
         " / New: " + stats["new"];
