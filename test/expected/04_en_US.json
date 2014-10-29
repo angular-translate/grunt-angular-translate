@@ -8,6 +8,7 @@
     "HtmlDirectivePluralFirst": "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}",
     "HtmlDirectiveStandalone": "HtmlDirectiveStandalone",
     "HtmlNgBindHtml Key ' 1/1": "HtmlNgBindHtml Key ' 1/1",
+    "NONAMESPACE": "NONAMESPACE",
     "SUB.NAMESPACE.VAL 1": "SUB.NAMESPACE.VAL 1",
     "SUB.NAMESPACE.VAL 2": "SUB.NAMESPACE.VAL 2",
     "SUB.NS.VAL 1": "SUB.NS.VAL 1",

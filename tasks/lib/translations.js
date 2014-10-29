@@ -194,11 +194,17 @@ Translations.cleanParents = function (obj) {
   var keys = _.sortBy(_.keys(obj));
   var keepKeys = [];
   _.forEach(keys, function (v) {
-    var splitted = v.split('.');
-    var splittedNS = _.reduce(splitted, function (m, v, k, l) {
-      return (k < splitted.length - 1) ? m + '.' + v : m;
-    });
     keepKeys.push(v);
+    var splitted = v.split('.');
+    for (var i = 1; i < splitted.length; i++)
+    {
+      var splittedNS = _.reduce(splitted.slice(0, i), function (m, v, k, l) {
+        return (k < splitted.length - 1) ? m + '.' + v : m;
+      });
+      _.remove(keepKeys, function (v) {
+        return v === splittedNS;
+      });
+    }
   });
   var cleanedObject = {};
   _.forEach(obj, function (v,k) {
