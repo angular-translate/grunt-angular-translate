@@ -103,6 +103,7 @@ module.exports = function (grunt) {
             case "JavascriptServiceSimpleQuote":
             case "JavascriptServiceInstantSimpleQuote":
             case "JavascriptFilterSimpleQuote":
+            case "JavascriptServiceArraySimpleQuote":
             case "HtmlNgBindHtml":
               translationKey = translationKey.replace(/\\\'/g, "'");
               break;
@@ -111,6 +112,7 @@ module.exports = function (grunt) {
             case "JavascriptServiceDoubleQuote":
             case "JavascriptServiceInstantDoubleQuote":
             case "JavascriptFilterDoubleQuote":
+            case "JavascriptServiceArrayDoubleQuote":
               translationKey = translationKey.replace(/\\\"/g, '"');
               break;
           }
@@ -132,6 +134,8 @@ module.exports = function (grunt) {
       HtmlNgBindHtml: 'ng-bind-html="\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*"',
       JavascriptServiceSimpleQuote: '\\$translate\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceDoubleQuote: '\\$translate\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
+      JavascriptServiceArraySimpleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\\\'(?:(?:\\.|[^\\\'\\\\])*)\')\\s*,*)+\\s*\\])\\s*)\\)',
+      JavascriptServiceArrayDoubleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\\\"(?:(?:\\.|[^\\\'\\\\])*)\")\\s*,*)+\\s*\\])\\s*)\\)',
       JavascriptServiceInstantSimpleQuote: '\\$translate\\.instant\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceInstantDoubleQuote: '\\$translate\\.instant\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
       JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
