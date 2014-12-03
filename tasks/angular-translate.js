@@ -242,7 +242,9 @@ module.exports = function (grunt) {
       var content = _file.readJSON(file);
       var recurseData = _recurseObject(content);
       for (var i in recurseData) {
-        results[ recurseData[i].trim() ] = '';
+        if (_.isString(recurseData[i])) {
+          results[ recurseData[i].trim() ] = '';
+        }
       }
     });
 
