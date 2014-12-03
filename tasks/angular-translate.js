@@ -113,22 +113,30 @@ module.exports = function (grunt) {
               translationKey = translationKey.replace(/\\\"/g, '"');
               break;
             case "JavascriptServiceArraySimpleQuote":
-            case "JavascriptServiceArrayDoubleQuote"://todo
-              var test;
-              test = translationKey.replace(/'([^']+(?='))'/g, '$1');
-              test = test.replace(/[\][]/g, '');
-              test = test.split(',');
+            case "JavascriptServiceArrayDoubleQuote":
+              var key;
 
-              _log.debug('length: '+test.length+ ' ' +test[0])
-                test.forEach(function(item){
-                  _log.debug('added: ' + item);
-                  results[ item ] = translationDefaultValue
-                });
+              if(regexName === "JavascriptServiceArraySimpleQuote") {
+                key = translationKey.replace(/'/g, '');
+              } else {
+                key = translationKey.replace(/"/g, '');
+              }
+              key = key.replace(/[\][]/g, '');
+              key = key.split(',');
 
-
-                break;
+              key.forEach(function(item){
+                item = item.replace(/\\\"/g, '"').trim();
+                results[item] = translationDefaultValue;
+              });
+              break;
           }
-          results[ translationKey ] = translationDefaultValue;
+
+          if( regexName !== "JavascriptServiceArraySimpleQuote" &&
+              regexName !== "JavascriptServiceArrayDoubleQuote") {
+            results[ translationKey ] = translationDefaultValue;
+          }
+
+
         }
       }
     };
@@ -146,8 +154,8 @@ module.exports = function (grunt) {
       HtmlNgBindHtml: 'ng-bind-html="\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*"',
       JavascriptServiceSimpleQuote: '\\$translate\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceDoubleQuote: '\\$translate\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
-      JavascriptServiceArraySimpleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\'(?:(?:\\.|[^\'\\\\])*)\')\\s*,*)+\\s*\\])\\s*)\\)',
-      JavascriptServiceArrayDoubleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\"(?:(?:\\.|[^\'\\\\])*)\")\\s*,*)+\\s*\\])\\s*)\\)',
+      JavascriptServiceArraySimpleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\'(?:(?:\\.|[^.*\'\\\\])*)\')\\s*,*\\s*)+\\s*\\])\\s*)\\)',
+      JavascriptServiceArrayDoubleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:"(?:(?:\\.|[^.*\'\\\\])*)")\\s*,*\\s*)+\\s*\\])\\s*)\\)',
       JavascriptServiceInstantSimpleQuote: '\\$translate\\.instant\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceInstantDoubleQuote: '\\$translate\\.instant\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
       JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
