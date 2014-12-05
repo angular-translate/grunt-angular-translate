@@ -170,7 +170,7 @@ Define language to be extract (fr__FR, en__US, xxx). xxx will be the output file
 Type: `String`
 Default: `""`
 
-Example: `".json"`
+Example: `"project_"`
 
 Set prefix to output filenames (cf [angular-translate#static-files][https://github.com/PascalPrecht/angular-translate/wiki/Asynchronous-loading#using-extension-static-files-loader]).
 
@@ -179,7 +179,7 @@ Set prefix to output filenames (cf [angular-translate#static-files][https://gith
 Type: `String`
 Default:  `""`
 
-Example: `"project_"`
+Example: `".json"`
 
 Set suffix to output filenames (cf [angular-translate#static-files][https://github.com/PascalPrecht/angular-translate/wiki/Asynchronous-loading#using-extension-static-files-loader]).
 
