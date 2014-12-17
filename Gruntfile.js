@@ -187,6 +187,20 @@ module.exports = function(grunt) {
         },
         dest:     'tmp',
         source:   'test/fixtures/default_exists_i18n_namespace.json' // Use to generate different output file
+      },
+
+      /**
+       * Test case: Use consistent output with options
+       */
+      extra_regexs: {
+        prefix:   '10_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     ['fr_FR'],
+        customRegex: [
+          'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
+        ],
+        dest:     'tmp'
       }
 
     },

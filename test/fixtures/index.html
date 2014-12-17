@@ -38,7 +38,7 @@
 <!--
   TEST CASE - Directive HTML plural
 -->
-<article>
+<article tt-default="'MY.CUSTOM.REGEX'|translate">
   <h1>Our title text</h1>
   <span angular-plural-extract="['HtmlDirectivePluralSecond for one!','# HtmlDirectivePluralSecond for others!']" translate="HtmlDirectivePluralSecond" translate-values="{NB: X}" translate-interpolation="messageformat"></span>
   <span translate="HtmlDirectivePluralFirst" angular-plural-extract="['HtmlDirectivePluralFirst for one!','# HtmlDirectivePluralFirst for others!']"  translate-values="{NB: X}" translate-interpolation="messageformat"></span>
