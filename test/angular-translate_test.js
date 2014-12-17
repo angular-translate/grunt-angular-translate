@@ -122,6 +122,16 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  extra_regexs: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/10_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/10_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };

@@ -37,6 +37,7 @@ module.exports = function (grunt) {
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
+      customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
       stringify_options = this.data.stringifyOptions || null,
       results = {};
 
@@ -136,6 +137,11 @@ module.exports = function (grunt) {
       JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptFilterDoubleQuote: '\\$filter\\(\\s*"translate"\\s*\\)\\s*\\(\\s*"((?:\\\\.|[^"\\\\\])*)"[^\\)]*\\)'
     };
+
+    _.forEach(customRegex, function (regex, key) {
+      regexs['others_' + key] = regex;
+    });
+
 
     /**
      * Recurse an object to retrieve as an array all the value of named parameters

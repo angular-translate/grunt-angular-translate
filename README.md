@@ -156,6 +156,21 @@ Example: `"en_US"`
 
 Define the default language. For default language, by default the key will be set as value.
 
+#### customRegex
+
+Type: `Array<String>`
+Default: `[]`
+
+Example: `
+customRegex: [
+  'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
+],
+`
+
+Will extract `MY.CUSTOM.REGEX` from the following HTML: `<article tt-default="'MY.CUSTOM.REGEX'|translate">`.
+
+Enjoy your custom regex guys!
+
 #### lang
 
 Type: `Array`
