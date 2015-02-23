@@ -113,8 +113,31 @@ module.exports = function (grunt) {
             case "JavascriptFilterDoubleQuote":
               translationKey = translationKey.replace(/\\\"/g, '"');
               break;
+            case "JavascriptServiceArraySimpleQuote":
+            case "JavascriptServiceArrayDoubleQuote":
+              var key;
+
+              if(regexName === "JavascriptServiceArraySimpleQuote") {
+                key = translationKey.replace(/'/g, '');
+              } else {
+                key = translationKey.replace(/"/g, '');
+              }
+              key = key.replace(/[\][]/g, '');
+              key = key.split(',');
+
+              key.forEach(function(item){
+                item = item.replace(/\\\"/g, '"').trim();
+                results[item] = translationDefaultValue;
+              });
+              break;
           }
-          results[ translationKey ] = translationDefaultValue;
+
+          if( regexName !== "JavascriptServiceArraySimpleQuote" &&
+              regexName !== "JavascriptServiceArrayDoubleQuote") {
+            results[ translationKey ] = translationDefaultValue;
+          }
+
+
         }
       }
     };
@@ -132,6 +155,8 @@ module.exports = function (grunt) {
       HtmlNgBindHtml: 'ng-bind-html="\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*"',
       JavascriptServiceSimpleQuote: '\\$translate\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceDoubleQuote: '\\$translate\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
+      JavascriptServiceArraySimpleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\'(?:(?:\\.|[^.*\'\\\\])*)\')\\s*,*\\s*)+\\s*\\])\\s*)\\)',
+      JavascriptServiceArrayDoubleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:"(?:(?:\\.|[^.*\'\\\\])*)")\\s*,*\\s*)+\\s*\\])\\s*)\\)',
       JavascriptServiceInstantSimpleQuote: '\\$translate\\.instant\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceInstantDoubleQuote: '\\$translate\\.instant\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
       JavascriptFilterSimpleQuote: '\\$filter\\(\\s*\'translate\'\\s*\\)\\s*\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
