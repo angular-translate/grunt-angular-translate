@@ -7,6 +7,7 @@
 Extract all the translation keys for angular-translate project
 
 ##Status
+
 [![NPM](https://nodei.co/npm/grunt-angular-translate.png)](https://nodei.co/npm/grunt-angular-translate/)
 
 ## Getting Started
@@ -29,7 +30,8 @@ This extraction is made to work with the [angular-translate][angular_translate] 
 #### Filters
 
 `{{'TRANSLATION' | translate}}`
-`{{'TRANSLATION' | translate:XXXXXX}}``
+
+`{{'TRANSLATION' | translate:XXXXXX}}`
 
 #### Directives
 
@@ -48,7 +50,9 @@ This extraction is made to work with the [angular-translate][angular_translate] 
 #### Service angular-translate
 
 `$translate('TRANSLATION')`
+
 `$translate.instant('TRANSLATION')`
+
 `$translate(['TRANSLATION', 'TRANSLATION_1'])`
 
 ## Configuration
