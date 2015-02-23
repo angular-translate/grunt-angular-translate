@@ -48,6 +48,8 @@ This extraction is made to work with the [angular-translate][angular_translate] 
 #### Service angular-translate
 
 `$translate('TRANSLATION')`
+`$translate.instant('TRANSLATION')`
+`$translate(['TRANSLATION', 'TRANSLATION_1'])`
 
 ## Configuration
 
