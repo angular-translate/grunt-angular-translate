@@ -18,13 +18,6 @@ angular.module('titleService', [])
     $translate.instant('JavascriptServiceInstantSimpleQuote 1/2 with var "{name}".', {name: 'name'});
     $translate.instant("JavascriptServiceInstantDoubleQuote 2/2 with var \"{name}\".", {name: 'name'});
 
-      $translate([
-        'JavascriptServiceArraySimpleQuote 1/2 without var.',
-        'JavascriptServiceArraySimpleQuote 2/2 without var.'
-      ]);
-
-      $translate(["JavascriptServiceArrayDoubleQuote 1/2 without var.", "JavascriptServiceArrayDoubleQuote 2/2 without var."]);
-
     var titleService = {
     };
 
