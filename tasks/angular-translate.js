@@ -304,7 +304,7 @@ module.exports = function (grunt) {
       var isDefaultLang = (defaultLang === lang);
       if (!_file.exists(filename)) {
         _log.debug('File doesn\'t exist');
-        
+
         _log.writeln('Create file: ' + destFilename + (isDefaultLang ? ' (' + lang + ' is the default language)' : ''));
         translations = _translation.getMergedTranslations({}, isDefaultLang);
 
@@ -327,7 +327,7 @@ module.exports = function (grunt) {
       _log.writeln(statsString);
 
       // Write JSON file for lang
-      _file.write(destFilename, customStringify(translations));
+      _file.write(destFilename, customStringify(translations) + '\n');
 
     });
 
