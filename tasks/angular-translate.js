@@ -29,32 +29,14 @@ module.exports = function (grunt) {
       dest = this.data.dest || '.',
       jsonSrc = _file.expand(this.data.jsonSrc || []),
       jsonSrcName = _.union(this.data.jsonSrcName || [], ['label']),
-      defaultLang = this.data.defaultLang || '.',
       interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
-      source = this.data.source || '',
       nullEmpty = this.data.nullEmpty || false,
       namespace = this.data.namespace || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
-      stringify_options = this.data.stringifyOptions || null,
       results = {};
-
-    var customStringify = function (val) {
-      if (stringify_options) {
-        return stringify(val, _.isObject(stringify_options) ? stringify_options : {
-          space: '    ',
-          cmp: function (a, b) {
-            var lower = function (a) {
-              return a.toLowerCase();
-            };
-            return lower(a.key) < lower(b.key) ? -1 : 1;
-          }
-        });
-      }
-      return JSON.stringify(val, null, 4);
-    };
 
     // Use to escape some char into regex patterns
     var escapeRegExp = function (str) {
@@ -286,51 +268,23 @@ module.exports = function (grunt) {
       "nullEmpty": nullEmpty
     }, results);
 
-    // Build all output langage files
-    this.data.lang.forEach(function (lang) {
+    // Prepare some params to pass to the adapter
+    var params = {
+      lang: this.data.lang,
+      dest: dest,
+      prefix: prefix,
+      suffix: suffix,
+      source: this.data.source,
+      defaultLang: this.data.defaultLang,
+      stringifyOptions: this.data.stringifyOptions
+    };
 
-      var destFilename = dest + '/' + prefix + lang + suffix,
-        filename = source,
-        translations = {},
-        json = {};
+    var JsonAdapter = require('./lib/json-adapter.js');
+    var toJson = new JsonAdapter(grunt);
 
-      // Test source filename
-      if (filename === '' || !_file.exists(filename)) {
-        filename = destFilename;
-      }
-
-      _log.subhead('Process ' + lang + ' : ' + filename);
-
-      var isDefaultLang = (defaultLang === lang);
-      if (!_file.exists(filename)) {
-        _log.debug('File doesn\'t exist');
-        
-        _log.writeln('Create file: ' + destFilename + (isDefaultLang ? ' (' + lang + ' is the default language)' : ''));
-        translations = _translation.getMergedTranslations({}, isDefaultLang);
-
-      } else {
-        _log.debug('File exist');
-        json = _file.readJSON(filename);
-        translations = _translation.getMergedTranslations(Translations.flatten(json), isDefaultLang);
-      }
-
-      var stats = _translation.getStats();
-      var statEmptyType = nullEmpty ? "null" : "empty";
-      var statPercentage =  Math.round(stats[statEmptyType] / stats["total"] * 100);
-      statPercentage = isNaN(statPercentage) ? 100 : statPercentage;
-      var statsString = "Statistics : " +
-        statEmptyType + ": " + stats[statEmptyType] + " (" + statPercentage + "%)" +
-        " / Updated: " + stats["updated"] +
-        " / Deleted: " + stats["deleted"] +
-        " / New: " + stats["new"];
-
-      _log.writeln(statsString);
-
-      // Write JSON file for lang
-      _file.write(destFilename, customStringify(translations));
-
-    });
-
+    // Persist to json file
+    toJson.init(params);
+    _translation.persist(toJson);
   });
 
 };

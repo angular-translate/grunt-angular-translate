@@ -292,6 +292,14 @@ Translations.prototype.incStat = function (type) {
     this._stats[type]++;
   }
 }
+
+/**
+ * Call the adapter to persist to disk
+ * @param {Function} adapter Function to call
+ */
+Translations.prototype.persist = function (adapter) {
+  adapter.persist(this);
+}
 /**
  * Wrap of flat.flatten method
  * @type {Function}
