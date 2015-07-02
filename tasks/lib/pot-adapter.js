@@ -50,9 +50,11 @@
       catalog.items.push(new PotObject(msg, translations[msg]));
     }
 
-    catalog.items.sort(function (a, b) {
-      return a.id.localeCompare(b.id);
+    catalog.items.sort(function(a, b) {
+      return a.id.toLowerCase().localeCompare(b.id.toLowerCase());
     });
+
+    console.log(catalog.items);
 
     _file.write(this.dest + '/' + this.prefix + this.suffix, catalog.toString());
   };

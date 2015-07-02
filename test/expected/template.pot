@@ -5,6 +5,34 @@ msgstr ""
 "Project-Id-Version: \n"
 
 msgctxt ""
+msgid "all.tato.tati"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tbti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tdti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tIiti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tZti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tzti"
+msgstr ""
+
+msgctxt ""
+msgid "all.toto.titi"
+msgstr ""
+
+msgctxt ""
 msgid "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô"
 msgstr ""
 
@@ -81,11 +109,23 @@ msgid "JavascriptServiceSimpleQuote 1/2 with var \"{name}\"."
 msgstr ""
 
 msgctxt ""
+msgid "myDoubleQuotedCommentTranslation \"e\"s\""
+msgstr ""
+
+msgctxt ""
+msgid "mySingleQ'uotedCommentTranslation '"
+msgstr ""
+
+msgctxt ""
 msgid "SUB.NAMESPACE.VAL 1"
 msgstr ""
 
 msgctxt ""
 msgid "SUB.NAMESPACE.VAL 2"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.vAL 0"
 msgstr ""
 
 msgctxt ""
@@ -102,44 +142,4 @@ msgstr ""
 
 msgctxt ""
 msgid "SUB.NS.VAL 2"
-msgstr ""
-
-msgctxt ""
-msgid "SUB.NS.vAL 0"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tIiti"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tZti"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tati"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tbti"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tdti"
-msgstr ""
-
-msgctxt ""
-msgid "all.tato.tzti"
-msgstr ""
-
-msgctxt ""
-msgid "all.toto.titi"
-msgstr ""
-
-msgctxt ""
-msgid "myDoubleQuotedCommentTranslation \"e\"s\""
-msgstr ""
-
-msgctxt ""
-msgid "mySingleQ'uotedCommentTranslation '"
 msgstr ""
