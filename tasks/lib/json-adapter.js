@@ -23,7 +23,7 @@
     this.dest = params.dest || '.';
     this.lang = params.lang;
     this.prefix = params.prefix;
-    this.suffix = params.suffix;
+    this.suffix = params.suffix || '.json';
     this.source = params.source;
     this.defaultLang = params.defaultLang;
     this.stringifyOptions = params.stringifyOptions;

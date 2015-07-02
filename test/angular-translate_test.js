@@ -132,6 +132,16 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  extract_to_pot: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/template.pot' );
+    var expected = grunt.file.read( 'test/expected/template.pot' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };

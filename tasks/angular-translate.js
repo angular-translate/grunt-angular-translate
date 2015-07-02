@@ -34,7 +34,7 @@ module.exports = function (grunt) {
       namespace = this.data.namespace || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
-      suffix = this.data.suffix || '.json',
+      suffix = this.data.suffix,
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
       adapter = this.data.adapter || 'json',
       results = {};
@@ -286,12 +286,12 @@ module.exports = function (grunt) {
         var toPot = new PotAdapter(grunt);
         toPot.init(params);
         _translation.persist(toPot);
+        break;
       default:
         var JsonAdapter = require('./lib/json-adapter.js');
         var toJson = new JsonAdapter(grunt);
         toJson.init(params);
         _translation.persist(toJson);
-        break;
     }
   });
 };

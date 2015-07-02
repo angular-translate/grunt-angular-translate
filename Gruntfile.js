@@ -201,8 +201,15 @@ module.exports = function(grunt) {
           'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
         ],
         dest:     'tmp'
-      }
+      },
 
+      extract_to_pot: {
+        adapter:  'pot',
+        prefix:   'template',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     [ '' ],
+        dest:     'tmp'
+      }
     },
 
     // Unit tests.
@@ -233,7 +240,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'i18nextract', 'nodeunit', 'clean']);
+  grunt.registerTask('test', ['clean', 'i18nextract', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['test']);

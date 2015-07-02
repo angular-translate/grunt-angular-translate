@@ -32,6 +32,8 @@
 
   PotAdapter.prototype.init = function(params) {
     this.dest = params.dest || '.';
+    this.prefix = params.prefix;
+    this.suffix = params.suffix || '.pot';
   };
 
   PotAdapter.prototype.persist = function(_translation) {
@@ -52,7 +54,7 @@
       return a.id.localeCompare(b.id);
     });
 
-    _file.write(this.dest + '/template.pot', catalog.toString());
+    _file.write(this.dest + '/' + this.prefix + this.suffix, catalog.toString());
   };
 
   module.exports = PotAdapter;
