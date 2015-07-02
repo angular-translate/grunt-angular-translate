@@ -36,6 +36,7 @@ module.exports = function (grunt) {
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix || '.json',
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
+      adapter = this.data.adapter || 'json',
       results = {};
 
     // Use to escape some char into regex patterns
@@ -279,12 +280,18 @@ module.exports = function (grunt) {
       stringifyOptions: this.data.stringifyOptions
     };
 
-    var JsonAdapter = require('./lib/json-adapter.js');
-    var toJson = new JsonAdapter(grunt);
-
-    // Persist to json file
-    toJson.init(params);
-    _translation.persist(toJson);
+    switch(adapter) {
+      case 'pot':
+        var PotAdapter = require('./lib/pot-adapter.js');
+        var toPot = new PotAdapter(grunt);
+        toPot.init(params);
+        _translation.persist(toPot);
+      default:
+        var JsonAdapter = require('./lib/json-adapter.js');
+        var toJson = new JsonAdapter(grunt);
+        toJson.init(params);
+        _translation.persist(toJson);
+        break;
+    }
   });
-
 };
