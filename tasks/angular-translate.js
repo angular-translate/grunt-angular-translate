@@ -67,7 +67,7 @@ module.exports = function (grunt) {
             case 'HtmlDirectivePluralLast':
               evalString = eval(r[2]);
               if (_.isArray(evalString) && evalString.length >= 2) {
-                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '') + "}";
               }
               translationKey = r[1].trim();
               break;
