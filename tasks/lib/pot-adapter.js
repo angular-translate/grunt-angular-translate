@@ -54,8 +54,6 @@
       return a.id.toLowerCase().localeCompare(b.id.toLowerCase());
     });
 
-    console.log(catalog.items);
-
     _file.write(this.dest + '/' + this.prefix + this.suffix, catalog.toString());
   };
 
