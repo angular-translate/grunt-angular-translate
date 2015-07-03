@@ -39,7 +39,8 @@ module.exports = function (grunt) {
       suffix = this.data.suffix || '.json',
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
       stringify_options = this.data.stringifyOptions || null,
-      results = {};
+      results = {},
+      keyAsText = this.data.keyAsText || false;
 
     var customStringify = function (val) {
       if (stringify_options) {
@@ -134,7 +135,11 @@ module.exports = function (grunt) {
 
           if( regexName !== "JavascriptServiceArraySimpleQuote" &&
               regexName !== "JavascriptServiceArrayDoubleQuote") {
-            results[ translationKey ] = translationDefaultValue;
+            if(keyAsText === true && translationDefaultValue.length === 0) {
+              results[ translationKey ] = translationKey;
+            } else {
+              results[ translationKey ] = translationDefaultValue;
+            }
           }
 
 

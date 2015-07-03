@@ -195,12 +195,21 @@ module.exports = function(grunt) {
       extra_regexs: {
         prefix:   '10_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html' ],
         lang:     ['fr_FR'],
         customRegex: [
           'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
         ],
         dest:     'tmp'
+      },
+
+      key_as_text: {
+        prefix:   '11_',
+        suffix:   '.json',
+        src: ['test/fixtures/index_key_as_text.html'],
+        lang: ['en_US'],
+        dest: 'tmp',
+        keyAsText: true
       }
 
     },

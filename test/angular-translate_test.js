@@ -132,6 +132,16 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  key_as_text: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/11_en_US.json' );
+    var expected = grunt.file.read( 'test/expected/11_en_US.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };
