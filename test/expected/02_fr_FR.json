@@ -1,4 +1,5 @@
 {
+    "HtmlFilterSimpleQuoteOneTimeBinding": "",
     "HtmlFilterDoubleQuote{} interp\"olation {{xx}}": "",
     "HtmlFilterDoubleQuote{} {{var}}on same line 1/2": "",
     "HtmlFilterDoubleQuote{} on same line 2/2": "",
