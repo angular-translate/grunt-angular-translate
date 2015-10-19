@@ -126,7 +126,7 @@ Translations.prototype.getMergedTranslations = function (obj, useDefault) {
     returnTranslations = this.getDefaultTranslations(returnTranslations);
   }
 
-  this.computeStats(obj, this.getFlatTranslations(), returnTranslations);
+  this.computeStats(obj, translations, returnTranslations);
 
   // Case namespace (tree representation)
   if (this.params.tree) {

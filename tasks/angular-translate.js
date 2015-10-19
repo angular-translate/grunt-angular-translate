@@ -127,7 +127,9 @@ module.exports = function (grunt) {
 
               key.forEach(function(item){
                 item = item.replace(/\\\"/g, '"').trim();
-                results[item] = translationDefaultValue;
+                if (item !== '') {
+                  results[item] = translationDefaultValue;
+                }
               });
               break;
           }
@@ -136,8 +138,6 @@ module.exports = function (grunt) {
               regexName !== "JavascriptServiceArrayDoubleQuote") {
             results[ translationKey ] = translationDefaultValue;
           }
-
-
         }
       }
     };

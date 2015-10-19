@@ -1,6 +1,6 @@
 {
   "name": "grunt-angular-translate-iow",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Extract all the translation keys for angular-translate project",
   "main": "Gruntfile.js",
   "directories": {
