@@ -1,7 +1,7 @@
 /**
  * grunt-angular-translate
  * https://github.com/firehist/grunt-angular-translate
- * 
+ *
  * Copyright (c) 2013 "firehist" Benjamin Longearet, contributors
  * Licensed under the MIT license.
  */
@@ -58,7 +58,7 @@ module.exports = function(grunt) {
       default_options: {
         prefix:   '00_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR'],
         dest:     'tmp'
       },
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         prefix:   '01_',
         suffix:   '.json',
         nullEmpty: true,
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR'],
         dest:     'tmp',
         source:   'test/fixtures/default_exists_i18n.json' // Use to generate different output file
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
       default_deleted_i18n : {
         prefix:   '02_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR'],
         dest:     'tmp',
         source:   'test/fixtures/default_deleted_i18n.json' // Use to generate different output file
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
           startDelimiter: '[[',
           endDelimiter: ']]'
         },
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR'],
         dest:     'tmp'
       },
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
       default_language: {
         prefix:   '04_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR', 'en_US'],
         dest:     'tmp',
         defaultLang: 'en_US'
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
       json_extract: {
         prefix:   '05_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         jsonSrc:  [ 'test/fixtures/*.json' ],
         jsonSrcName: ['label'],
         lang:     ['en_US'],
@@ -195,12 +195,24 @@ module.exports = function(grunt) {
       extra_regexs: {
         prefix:   '10_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js' ],
         lang:     ['fr_FR'],
         customRegex: [
           'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
         ],
         dest:     'tmp'
+      },
+
+      /**
+       * Test case: Preserve translation links
+       */
+      keep_translation_links: {
+        prefix:    '11_',
+        suffix:    '.json',
+        src:       [ 'test/fixtures/links.js' ],
+        lang:      ['en_US'],
+        dest:      'test/existing',
+        namespace: true
       }
 
     },

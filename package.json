@@ -1,6 +1,6 @@
 {
-  "name": "grunt-angular-translate",
-  "version": "0.3.0",
+  "name": "grunt-angular-translate-iow",
+  "version": "0.3.1",
   "description": "Extract all the translation keys for angular-translate project",
   "main": "Gruntfile.js",
   "directories": {
@@ -20,7 +20,8 @@
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt-markdox": "^0.1.0"
+    "grunt-markdox": "^0.1.0",
+    "nodeunit": "^0.9.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
