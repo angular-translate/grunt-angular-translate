@@ -1,0 +1,8 @@
+{
+    "COMMON": {
+        "A_VIRTUAL_TRANSLATION": "A virtual translation",
+        "A_TRANSLATION": "Just a translation",
+        "A_VIRTUAL_LINK": "@:COMMON.A_VIRTUAL_TRANSLATION",
+        "A_TRUE_LINK": "@:COMMON.A_TRANSLATION"
+    }
+}
