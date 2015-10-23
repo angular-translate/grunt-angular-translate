@@ -142,7 +142,7 @@ exports.i18nextract = {
     test.deepEqual( actual, expected, 'Should equal.' );
 
     test.done();
-  }
+  },
 
   key_as_text: function(test) {
     test.expect(1);
