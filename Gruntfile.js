@@ -213,6 +213,17 @@ module.exports = function(grunt) {
         lang:      ['en_US'],
         dest:      'test/existing',
         namespace: true
+
+      /**
+       * Test case: Allow text as keys
+       */
+      key_as_text: {
+        prefix:   '11_',
+        suffix:   '.json',
+        src: ['test/fixtures/index_key_as_text.html'],
+        lang: ['en_US'],
+        dest: 'tmp',
+        keyAsText: true
       }
 
     },

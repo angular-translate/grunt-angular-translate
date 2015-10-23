@@ -88,6 +88,7 @@ Options src and jsonSrc may be specified according to the grunt Configuring task
 - [dest](#dest)
 - [safeMode](#safeMode)
 - [stringifyOptions](#stringifyOptions)
+- [keyAsText](#keyAsText)
 
 #### src
 
@@ -229,6 +230,12 @@ Default: `false`
 
 If stringifyOptions is set to `true` the output will be sort (case insensitive).
 If stringifyOptions is an `object`, you can easily check [json-stable-stringify](https://github.com/substack/json-stable-stringify) README.
+
+#### keyAsText
+Type: `Boolean`
+Default: `false`
+
+If keyAsText is set to `true` translations keys works also as value for this translation.
 
 ## Test
 
