@@ -2,20 +2,25 @@
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/angular-translate/grunt-angular-translate?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Task that extract all the translation keys for angular-translate project. It searches all view, and js scripts to find 
+Task that extracts all the translation keys for angular-translate
+project. It searches all view, and js scripts to find
 `angular-translate` calls; such as:
+
 * `{{'KEY_IN_VIEW' | translate }}`
 * `$translate.instant('KEY_IN_SCRIPT')`
 
-Each found key is then extracted to json files with translations. For each local defined in Gruntfile separate json is created:
+Each found key is then extracted to json files with translations. For
+each local defined in Gruntfile separate json is created:
 
     {
       "KEY_IN_VIEW": "",
       "KEY_IN_SCRIPT": ""
     }
 
-Translation should be proviede in the created files. On the next runs `grunt-angular-translate` will not changed keys
-already translated; add keys that was added to the source; and remove the ones that are not more present in the source.
+Translation should be provided in the created files. On the next run,
+`grunt-angular-translate` will not changed keys already translated.
+It will only add keys that were added to the source and remove the
+ones that are not present anymore in the source.
 
 
 ##Status
