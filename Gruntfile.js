@@ -225,8 +225,18 @@ module.exports = function(grunt) {
         lang: ['en_US'],
         dest: 'tmp',
         keyAsText: true
-      }
+      },
 
+      /**
+       * Test case: POT adapter
+       */
+      extract_to_pot: {
+        adapter:  'pot',
+        prefix:   'template',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        lang:     [ '' ],
+        dest:     'tmp'
+      }
     },
 
     // Unit tests.
