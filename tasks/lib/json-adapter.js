@@ -80,7 +80,7 @@
 
       // Write JSON file for lang
       var utils = new Utils();
-      _file.write(destFilename, utils.customStringify(translations, stringify_options));
+      _file.write(destFilename, utils.customStringify(translations, stringify_options) + '\n');
 
     });
   };
