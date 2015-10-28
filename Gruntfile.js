@@ -233,7 +233,7 @@ module.exports = function(grunt) {
       extract_to_pot: {
         adapter:  'pot',
         prefix:   'template',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js' ],
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     [ '' ],
         dest:     'tmp'
       }

@@ -53,6 +53,10 @@ msgid "HtmlDirectiveStandalone"
 msgstr ""
 
 msgctxt ""
+msgid "HtmlFilterDoubleQuote{} {{var}}on same line 1/2"
+msgstr ""
+
+msgctxt ""
 msgid "HtmlFilterDoubleQuote{} interp\"olation {{xx}}"
 msgstr ""
 
@@ -61,7 +65,7 @@ msgid "HtmlFilterDoubleQuote{} on same line 2/2"
 msgstr ""
 
 msgctxt ""
-msgid "HtmlFilterDoubleQuote{} {{var}}on same line 1/2"
+msgid "HtmlFilterSimpleQuoteOneTimeBinding"
 msgstr ""
 
 msgctxt ""
