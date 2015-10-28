@@ -29,18 +29,17 @@ module.exports = function (grunt) {
       dest = this.data.dest || '.',
       jsonSrc = _file.expand(this.data.jsonSrc || []),
       jsonSrcName = _.union(this.data.jsonSrcName || [], ['label']),
-      defaultLang = this.data.defaultLang || '.',
       interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
-      source = this.data.source || '',
       nullEmpty = this.data.nullEmpty || false,
       namespace = this.data.namespace || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
-      suffix = this.data.suffix || '.json',
+      suffix = this.data.suffix,
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
       stringify_options = this.data.stringifyOptions || null,
       results = {},
-      keyAsText = this.data.keyAsText || false;
+      keyAsText = this.data.keyAsText || false,
+      adapter = this.data.adapter || 'json';
 
     var customStringify = function (val) {
       if (stringify_options) {
@@ -85,7 +84,7 @@ module.exports = function (grunt) {
             case 'HtmlDirectivePluralLast':
               evalString = eval(r[2]);
               if (_.isArray(evalString) && evalString.length >= 2) {
-                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '') + "}";
               }
               translationKey = r[1].trim();
               break;
@@ -336,6 +335,29 @@ module.exports = function (grunt) {
 
     });
 
-  });
+    // Prepare some params to pass to the adapter
+    var params = {
+      lang: this.data.lang,
+      dest: dest,
+      prefix: prefix,
+      suffix: suffix,
+      source: this.data.source,
+      defaultLang: this.data.defaultLang,
+      stringifyOptions: this.data.stringifyOptions
+    };
 
+    switch(adapter) {
+      case 'pot':
+        var PotAdapter = require('./lib/pot-adapter.js');
+        var toPot = new PotAdapter(grunt);
+        toPot.init(params);
+        _translation.persist(toPot);
+        break;
+      default:
+        var JsonAdapter = require('./lib/json-adapter.js');
+        var toJson = new JsonAdapter(grunt);
+        toJson.init(params);
+        _translation.persist(toJson);
+    }
+  });
 };
