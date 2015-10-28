@@ -69,6 +69,13 @@
   <span translate style="text-align:center">HtmlDirective 1/2 &é"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô</span> - <span translate style="text-align:center">HtmlDirective 2/2</span>
 </p>
 
+<!--
+  TEST CASE - Keyword "translate" in string in HTML tag should not register enclosed text as a key
+-->
+<p>
+  <span style="text-align:center" title="{{ TEST.KEY | translate }}">HtmlDirective translate in string</span>
+</p>
+
 </body>
 
 </html>
