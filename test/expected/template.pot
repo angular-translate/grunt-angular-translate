@@ -121,6 +121,10 @@ msgid "mySingleQ'uotedCommentTranslation '"
 msgstr ""
 
 msgctxt ""
+msgid "NONAMESPACE"
+msgstr ""
+
+msgctxt ""
 msgid "SUB.NAMESPACE.VAL 1"
 msgstr ""
 
