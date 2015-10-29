@@ -18,7 +18,7 @@ each local defined in Gruntfile separate json is created:
     }
 
 Translation should be provided in the created files. On the next run,
-`grunt-angular-translate` will not changed keys already translated.
+`grunt-angular-translate` will not change keys already translated.
 It will only add keys that were added to the source and remove the
 ones that are not present anymore in the source.
 
