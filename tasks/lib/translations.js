@@ -97,7 +97,7 @@ Translations.prototype.getMergedTranslations = function (obj, useDefault) {
   } else {
     // Determine used translation links
     _.forEach(obj, function (v, k) {
-      if (v.indexOf('@:') === 0) {
+      if (v && v.indexOf('@:') === 0) {
         links.push(v.substr(2));
       }
     });

@@ -213,11 +213,9 @@ module.exports = function(grunt) {
         lang:     ['fr_FR'],
         customRegex: {
           'translate_function\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)': function (translationKey) {
-            console.log('okokokok')
             return translationKey.replace(/\\\'/g, "'");
           },
           'translate_function\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)': function (translationKey) {
-            console.log('okokokok')
             return translationKey.replace(/\\\"/g, '"');
           }
         },
