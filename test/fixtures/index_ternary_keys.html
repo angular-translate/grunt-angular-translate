@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+
+<head>
+  <title>grunt-angular-translate test page</title>
+  <meta charset="utf-8"/>
+</head>
+
+<body>
+
+<!--
+  TEST CASE - Filter HTML
+  Interpolation: [[ ]]
+  Simple quote
+  Variables
+  Spaces
+  Multiple occurences on same row
+-->
+<h3 translate="{{edit ? 'TEST.Update.01' : 'TEST.Update.New user 01'}}" ></h3>
+<h3 translate>{{edit ? 'Update 02' : 'New user 02'}}</h3>
+<h3>{{edit ? "Update 03" : "New \"user 03" | translate}}</h3>
+{{ translate_function(edit ? 'Update 04' : 'New user 04') }}
+<span style="text-align:center" ng-bind-html="edit ? 'Update 05' : 'New user 05' | translate"></span>
+<h3 title="{{edit ? 'Update \' 06' : 'New user 06' | translate}}"></h3>
+
+</body>
+
+</html>

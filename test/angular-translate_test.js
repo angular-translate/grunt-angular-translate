@@ -164,6 +164,16 @@ exports.i18nextract = {
     test.done();
   },
 
+  ternary_keys: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/13_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/13_fr_FR.json' );
+    test.equal( actual, expected, 'ternary_keys: 13_fr_FR.json should equal.' );
+
+    test.done();
+  },
+
   extract_to_pot: function(test) {
     test.expect(1);
 
