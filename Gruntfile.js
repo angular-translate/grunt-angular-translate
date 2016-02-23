@@ -58,7 +58,7 @@ module.exports = function(grunt) {
       default_options: {
         prefix:   '00_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         dest:     'tmp'
       },
@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         prefix:   '01_',
         suffix:   '.json',
         nullEmpty: true,
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         dest:     'tmp',
         source:   'test/fixtures/default_exists_i18n.json' // Use to generate different output file
@@ -76,7 +76,7 @@ module.exports = function(grunt) {
       default_deleted_i18n : {
         prefix:   '02_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         dest:     'tmp',
         source:   'test/fixtures/default_deleted_i18n.json' // Use to generate different output file
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
           startDelimiter: '[[',
           endDelimiter: ']]'
         },
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         dest:     'tmp'
       },
@@ -97,7 +97,7 @@ module.exports = function(grunt) {
       default_language: {
         prefix:   '04_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR', 'en_US'],
         dest:     'tmp',
         defaultLang: 'en_US'
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
       json_extract: {
         prefix:   '05_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         jsonSrc:  [ 'test/fixtures/*.json' ],
         jsonSrcName: ['label'],
         lang:     ['en_US'],
@@ -195,7 +195,7 @@ module.exports = function(grunt) {
       extra_regexs: {
         prefix:   '10_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         customRegex: [
           'tt-default="\'((?:\\\\.|[^\'\\\\])*)\'\\|translate"'
@@ -209,7 +209,7 @@ module.exports = function(grunt) {
       extra_regexs_object: {
         prefix:   '10_1_',
         suffix:   '.json',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     ['fr_FR'],
         customRegex: {
           'translate_function\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)': function (translationKey) {
@@ -247,12 +247,28 @@ module.exports = function(grunt) {
       },
 
       /**
+       * Test case: Allow text as keys
+       */
+      ternary_keys: {
+        prefix:   '13_',
+        suffix:   '.json',
+        src: ['test/fixtures/index_ternary_keys.html'],
+        lang: ['fr_FR'],
+        dest: 'tmp',
+        customRegex: {
+          'translate_function\\(\\s*([^?]*?[^:]*:[^|}]*)[^\\)]*\\)': function (translationKey) {
+            return translationKey.replace(/\\\'/g, "'");
+          }
+        }
+      },
+
+      /**
        * Test case: POT adapter
        */
       extract_to_pot: {
         adapter:  'pot',
         prefix:   'template',
-        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        src:      [ 'test/fixtures/index.html', 'test/fixtures/index_key_as_text.html', 'test/fixtures/index_namespace.html', 'test/fixtures/index_namespace_consistent_output.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
         lang:     [ '' ],
         dest:     'tmp'
       }

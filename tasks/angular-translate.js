@@ -136,14 +136,28 @@ module.exports = function (grunt) {
             }
           }
 
-          if( regexName !== "JavascriptServiceArraySimpleQuote" &&
-            regexName !== "JavascriptServiceArrayDoubleQuote") {
-            if(keyAsText === true && translationDefaultValue.length === 0) {
-              results[ translationKey ] = translationKey;
-            } else {
-              results[ translationKey ] = translationDefaultValue;
+          // Store the translationKey with the value into results
+          var defaultValueByTranslationKey = function (translationKey, translationDefaultValue) {
+            if (regexName !== "JavascriptServiceArraySimpleQuote" &&
+              regexName !== "JavascriptServiceArrayDoubleQuote") {
+              if (keyAsText === true && translationDefaultValue.length === 0) {
+                results[translationKey] = translationKey;
+              } else {
+                results[translationKey] = translationDefaultValue;
+              }
             }
           }
+
+          // Ternary operation
+          var ternaryKeys = _extractTernaryKey(translationKey)
+          if (ternaryKeys) {
+            _.forEach(ternaryKeys, function(v) {
+              defaultValueByTranslationKey(v);
+            });
+          } else {
+            defaultValueByTranslationKey(translationKey, translationDefaultValue);
+          }
+
         }
       }
     };
@@ -154,12 +168,14 @@ module.exports = function (grunt) {
       commentDoubleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/"((?:\\\\.|[^"\\\\])*)"',
       HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
       HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
+      HtmlFilterTernary: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?([^?]*\\?[^:]*:[^|}]*)\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
       HtmlDirective: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate(?:>|\\s[^>]*>)([^<]*)',
       HtmlDirectiveSimpleQuote: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate=\'([^\']*)\'[^>]*>([^<]*)',
       HtmlDirectiveDoubleQuote: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate="([^"]*)"[^>]*>([^<]*)',
       HtmlDirectivePluralLast: 'translate="((?:\\\\.|[^"\\\\])*)".*angular-plural-extract="((?:\\\\.|[^"\\\\])*)"',
       HtmlDirectivePluralFirst: 'angular-plural-extract="((?:\\\\.|[^"\\\\])*)".*translate="((?:\\\\.|[^"\\\\])*)"',
       HtmlNgBindHtml: 'ng-bind-html="\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*"',
+      HtmlNgBindHtmlTernary: 'ng-bind-html="\\s*([^?]*?[^:]*:[^|}]*)\\s*\\|\\s*translate(:.*?)?\\s*"',
       JavascriptServiceSimpleQuote: '\\$translate\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)',
       JavascriptServiceDoubleQuote: '\\$translate\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)',
       JavascriptServiceArraySimpleQuote: '\\$translate\\((?:\\s*(\\[\\s*(?:(?:\'(?:(?:\\.|[^.*\'\\\\])*)\')\\s*,*\\s*)+\\s*\\])\\s*)\\)',
@@ -178,6 +194,23 @@ module.exports = function (grunt) {
       }
     });
 
+
+    var _extractTernaryKey = function (key) {
+      var delimiterRegexp = new RegExp('(' + escapeRegExp(interpolation.startDelimiter) + ')|(' + escapeRegExp(interpolation.endDelimiter) + ')', 'g')
+      var ternarySimpleQuoteRegexp = new RegExp('([^?]*)\\?(?:\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*):\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*')
+      var ternaryDoubleQuoteRegexp = new RegExp('([^?]*)\\?(?:\\s*"((?:\\\\.|[^"\\\\])*)"\\s*):\\s*"((?:\\\\.|[^"\\\\])*)"\\s*')
+
+      var cleanKey = key.replace(delimiterRegexp, '');
+      var match = cleanKey.match(ternaryDoubleQuoteRegexp);
+      if (!match) {
+        match = cleanKey.match(ternarySimpleQuoteRegexp);
+      }
+
+      if (match && match.length > 3) {
+        return [match[2], match[3]]
+      }
+      return null
+    };
 
     /**
      * Recurse an object to retrieve as an array all the value of named parameters
