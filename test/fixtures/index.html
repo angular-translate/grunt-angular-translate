@@ -25,6 +25,16 @@
 <!--
   TEST CASE - Filter HTML
   Interpolation: {{ }}
+  Simple quote
+  One time binding
+-->
+<header style="font-family:'Helvetica Neue'">
+  <h1 style="color:red">{{ ::'HtmlFilterSimpleQuoteOneTimeBinding' | translate }}</h1>
+</header>
+
+<!--
+  TEST CASE - Filter HTML
+  Interpolation: {{ }}
   Double quote
   Variables
   Spaces
@@ -57,6 +67,13 @@
 -->
 <p>
   <span translate style="text-align:center">HtmlDirective 1/2 &é"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô</span> - <span translate style="text-align:center">HtmlDirective 2/2</span>
+</p>
+
+<!--
+  TEST CASE - Keyword "translate" in string in HTML tag should not register enclosed text as a key
+-->
+<p>
+  <span style="text-align:center" title="{{ TEST.KEY | translate }}">HtmlDirective translate in string</span>
 </p>
 
 </body>

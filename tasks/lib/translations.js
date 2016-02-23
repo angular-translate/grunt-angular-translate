@@ -75,51 +75,66 @@ function Translations (params, translations) {
  * @returns {boolean}
  */
 Translations.prototype.getMergedTranslations = function (obj, useDefault) {
-  var _returnTranslations = false;
+  var returnTranslations = {};
+  var self = this;
+  var translations = _.clone(this.getFlatTranslations());
+  var links = [];
+
   if (_.isUndefined(obj) || !_.isPlainObject(obj)) {
     obj = {};
   }
 
-  var self = this;
-  var _translations = _.clone(this.getFlatTranslations());
-
-  _returnTranslations = {};
-
   // Case safeMode: Dont delete unused value if true
   if (this.params.safeMode) {
-    _returnTranslations = _.extend(_translations, obj);
-    _.forEach(_returnTranslations, function (v, k) {
+    returnTranslations = _.extend(translations, obj);
+    _.forEach(returnTranslations, function (v, k) {
       if (__isValidTranslation(v)) {
-        _returnTranslations[k] = v;
+        returnTranslations[k] = v;
       } else {
-        _returnTranslations[k] = self.params.nullEmpty ? null : "";
+        returnTranslations[k] = self.params.nullEmpty ? null : "";
       }
     });
   } else {
-    _returnTranslations = {};
-    _.forEach(_translations, function (v, k) {
+    // Determine used translation links
+    _.forEach(obj, function (v, k) {
+      if (v.indexOf('@:') === 0) {
+        links.push(v.substr(2));
+      }
+    });
+
+    // Pre-add translation for the links used
+    _.forEach(links, function (k) {
+        if (__isValidTranslation(obj[k])) {
+          returnTranslations[k] = obj[k];
+          translations[k] = '';
+        }
+    });
+
+    // Add new translations
+    _.forEach(translations, function (v, k) {
       if (__isValidTranslation(obj[k])) {     // Get from old translations
-        _returnTranslations[k] = obj[k];
+        returnTranslations[k] = obj[k];
       } else if (__isValidTranslation(v)) {   // Get from extracted translations
-        _returnTranslations[k] = v;
+        returnTranslations[k] = v;
       } else {                                // Feed empty translation (null or "")
-        _returnTranslations[k] = self.params.nullEmpty ? null : "";
+        returnTranslations[k] = self.params.nullEmpty ? null : "";
       }
     });
   }
 
   if (!_.isUndefined(useDefault) && useDefault) {
-    _returnTranslations = this.getDefaultTranslations(_returnTranslations);
+    returnTranslations = this.getDefaultTranslations(returnTranslations);
   }
 
-  this.computeStats(obj, this.getFlatTranslations(), _returnTranslations);
+  this.computeStats(obj, translations, returnTranslations);
 
   // Case namespace (tree representation)
   if (this.params.tree) {
     // We need to remove parent NS
-    _returnTranslations = flat.unflatten(Translations.cleanParents(_returnTranslations));
+    returnTranslations = flat.unflatten(Translations.cleanParents(returnTranslations));
   }
-  return _returnTranslations;
+
+  return returnTranslations;
 }
 
 /**
@@ -194,14 +209,17 @@ Translations.cleanParents = function (obj) {
   var keys = _.sortBy(_.keys(obj));
   var keepKeys = [];
   _.forEach(keys, function (v) {
-    var splitted = v.split('.');
-    var splittedNS = _.reduce(splitted, function (m, v, k, l) {
-      return (k < splitted.length - 1) ? m + '.' + v : m;
-    });
     keepKeys.push(v);
-    _.remove(keepKeys, function (v) {
-      return v === splittedNS;
-    });
+    var splitted = v.split('.');
+    for (var i = 1; i < splitted.length; i++)
+    {
+      var splittedNS = _.reduce(splitted.slice(0, i), function (m, v, k, l) {
+        return (k < splitted.length - 1) ? m + '.' + v : m;
+      });
+      _.remove(keepKeys, function (v) {
+        return v === splittedNS;
+      });
+    }
   });
   var cleanedObject = {};
   _.forEach(obj, function (v,k) {
@@ -291,6 +309,14 @@ Translations.prototype.incStat = function (type) {
   if (this.existStats(type)) {
     this._stats[type]++;
   }
+}
+
+/**
+ * Call the adapter to persist to disk
+ * @param {Function} adapter Function to call
+ */
+Translations.prototype.persist = function (adapter) {
+  adapter.persist(this);
 }
 /**
  * Wrap of flat.flatten method

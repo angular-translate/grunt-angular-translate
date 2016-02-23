@@ -29,32 +29,19 @@ module.exports = function (grunt) {
       dest = this.data.dest || '.',
       jsonSrc = _file.expand(this.data.jsonSrc || []),
       jsonSrcName = _.union(this.data.jsonSrcName || [], ['label']),
-      defaultLang = this.data.defaultLang || '.',
       interpolation = this.data.interpolation || {startDelimiter: '{{', endDelimiter: '}}'},
       source = this.data.source || '',
+      defaultLang = this.data.defaultLang || '.',
       nullEmpty = this.data.nullEmpty || false,
       namespace = this.data.namespace || false,
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
-      suffix = this.data.suffix || '.json',
+      suffix = this.data.suffix,
       customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
       stringify_options = this.data.stringifyOptions || null,
-      results = {};
-
-    var customStringify = function (val) {
-      if (stringify_options) {
-        return stringify(val, _.isObject(stringify_options) ? stringify_options : {
-          space: '    ',
-          cmp: function (a, b) {
-            var lower = function (a) {
-              return a.toLowerCase();
-            };
-            return lower(a.key) < lower(b.key) ? -1 : 1;
-          }
-        });
-      }
-      return JSON.stringify(val, null, 4);
-    };
+      results = {},
+      keyAsText = this.data.keyAsText || false,
+      adapter = this.data.adapter || 'json';
 
     // Use to escape some char into regex patterns
     var escapeRegExp = function (str) {
@@ -84,7 +71,7 @@ module.exports = function (grunt) {
             case 'HtmlDirectivePluralLast':
               evalString = eval(r[2]);
               if (_.isArray(evalString) && evalString.length >= 2) {
-                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '');
+                translationDefaultValue = "{NB, plural, one{" + evalString[0] + "} other{" + evalString[1] + "}" + (evalString[2] ? ' ' + evalString[2] : '') + "}";
               }
               translationKey = r[1].trim();
               break;
@@ -127,17 +114,21 @@ module.exports = function (grunt) {
 
               key.forEach(function(item){
                 item = item.replace(/\\\"/g, '"').trim();
-                results[item] = translationDefaultValue;
+                if (item !== '') {
+                  results[item] = translationDefaultValue;
+                }
               });
               break;
           }
 
           if( regexName !== "JavascriptServiceArraySimpleQuote" &&
               regexName !== "JavascriptServiceArrayDoubleQuote") {
-            results[ translationKey ] = translationDefaultValue;
+            if(keyAsText === true && translationDefaultValue.length === 0) {
+              results[ translationKey ] = translationKey;
+            } else {
+              results[ translationKey ] = translationDefaultValue;
+            }
           }
-
-
         }
       }
     };
@@ -146,9 +137,9 @@ module.exports = function (grunt) {
     var regexs = {
       commentSimpleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/\'((?:\\\\.|[^\'\\\\])*)\'',
       commentDoubleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/"((?:\\\\.|[^"\\\\])*)"',
-      HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
-      HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
-      HtmlDirective: '<[^>]*translate[^{>]*>([^<]*)<\/[^>]*>',
+      HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
+      HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
+      HtmlDirective: '<(?:[^>"]|"(?:[^"]|/")*")*\\stranslate(?:\\s[^{>]*>|>)([^<]*)<\/[^>]*>',
       HtmlDirectiveStandalone: 'translate="((?:\\\\.|[^"\\\\])*)"',
       HtmlDirectivePluralLast: 'translate="((?:\\\\.|[^"\\\\])*)".*angular-plural-extract="((?:\\\\.|[^"\\\\])*)"',
       HtmlDirectivePluralFirst: 'angular-plural-extract="((?:\\\\.|[^"\\\\])*)".*translate="((?:\\\\.|[^"\\\\])*)"',
@@ -286,51 +277,30 @@ module.exports = function (grunt) {
       "nullEmpty": nullEmpty
     }, results);
 
-    // Build all output langage files
-    this.data.lang.forEach(function (lang) {
+    // Prepare some params to pass to the adapter
+    var params = {
+      lang: this.data.lang,
+      dest: dest,
+      prefix: prefix,
+      suffix: suffix,
+      source: this.data.source,
+      defaultLang: this.data.defaultLang,
+      stringifyOptions: this.data.stringifyOptions
+    };
 
-      var destFilename = dest + '/' + prefix + lang + suffix,
-        filename = source,
-        translations = {},
-        json = {};
-
-      // Test source filename
-      if (filename === '' || !_file.exists(filename)) {
-        filename = destFilename;
-      }
-
-      _log.subhead('Process ' + lang + ' : ' + filename);
-
-      var isDefaultLang = (defaultLang === lang);
-      if (!_file.exists(filename)) {
-        _log.debug('File doesn\'t exist');
-        
-        _log.writeln('Create file: ' + destFilename + (isDefaultLang ? ' (' + lang + ' is the default language)' : ''));
-        translations = _translation.getMergedTranslations({}, isDefaultLang);
-
-      } else {
-        _log.debug('File exist');
-        json = _file.readJSON(filename);
-        translations = _translation.getMergedTranslations(Translations.flatten(json), isDefaultLang);
-      }
-
-      var stats = _translation.getStats();
-      var statEmptyType = nullEmpty ? "null" : "empty";
-      var statPercentage =  Math.round(stats[statEmptyType] / stats["total"] * 100);
-      statPercentage = isNaN(statPercentage) ? 100 : statPercentage;
-      var statsString = "Statistics : " +
-        statEmptyType + ": " + stats[statEmptyType] + " (" + statPercentage + "%)" +
-        " / Updated: " + stats["updated"] +
-        " / Deleted: " + stats["deleted"] +
-        " / New: " + stats["new"];
-
-      _log.writeln(statsString);
-
-      // Write JSON file for lang
-      _file.write(destFilename, customStringify(translations));
-
-    });
+    switch(adapter) {
+      case 'pot':
+        var PotAdapter = require('./lib/pot-adapter.js');
+        var toPot = new PotAdapter(grunt);
+        toPot.init(params);
+        _translation.persist(toPot);
+        break;
+      default:
+        var JsonAdapter = require('./lib/json-adapter.js');
+        var toJson = new JsonAdapter(grunt);
+        toJson.init(params);
+        _translation.persist(toJson);
+    };
 
   });
-
 };

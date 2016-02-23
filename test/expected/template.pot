@@ -1,0 +1,153 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Project-Id-Version: \n"
+
+msgctxt ""
+msgid "all.tato.tati"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tbti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tdti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tIiti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tZti"
+msgstr ""
+
+msgctxt ""
+msgid "all.tato.tzti"
+msgstr ""
+
+msgctxt ""
+msgid "all.toto.titi"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlDirective 1/2 &é\"'(-è_çà)=$^ù!:;,}@^`[{#~@Ùô"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlDirective 2/2"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlDirectivePluralFirst"
+msgstr "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}}"
+
+msgctxt ""
+msgid "HtmlDirectivePluralSecond"
+msgstr "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}}"
+
+msgctxt ""
+msgid "HtmlDirectiveStandalone"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlFilterDoubleQuote{} {{var}}on same line 1/2"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlFilterDoubleQuote{} interp\"olation {{xx}}"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlFilterDoubleQuote{} on same line 2/2"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlFilterSimpleQuoteOneTimeBinding"
+msgstr ""
+
+msgctxt ""
+msgid "HtmlNgBindHtml Key ' 1/1"
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptFilter 1/2 with var \"{name}\""
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptFilter 2/2 without var"
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceArrayDoubleQuote 1/2 without var."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceArrayDoubleQuote 2/2 without var."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceArraySimpleQuote 1/2 without var."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceArraySimpleQuote 2/2 without var."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceDoubleQuote 2/2 with var \"{name}\"."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceInstantDoubleQuote 2/2 with var \"{name}\"."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceInstantSimpleQuote 1/2 with var \"{name}\"."
+msgstr ""
+
+msgctxt ""
+msgid "JavascriptServiceSimpleQuote 1/2 with var \"{name}\"."
+msgstr ""
+
+msgctxt ""
+msgid "myDoubleQuotedCommentTranslation \"e\"s\""
+msgstr ""
+
+msgctxt ""
+msgid "mySingleQ'uotedCommentTranslation '"
+msgstr ""
+
+msgctxt ""
+msgid "NONAMESPACE"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NAMESPACE.VAL 1"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NAMESPACE.VAL 2"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.vAL 0"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.VAL 1"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.VAL 1.test 2"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.VAL 1.test1"
+msgstr ""
+
+msgctxt ""
+msgid "SUB.NS.VAL 2"
+msgstr ""

@@ -132,6 +132,36 @@ exports.i18nextract = {
     test.equal( actual, expected, 'Should equal.' );
 
     test.done();
+  },
+
+  keep_translation_links: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.readJSON( 'test/existing/11_en_US.json' );
+    var expected = grunt.file.readJSON( 'test/expected/11_en_US.json' );
+    test.deepEqual( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
+  key_as_text: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/12_en_US.json' );
+    var expected = grunt.file.read( 'test/expected/12_en_US.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
+  extract_to_pot: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/template.pot' );
+    var expected = grunt.file.read( 'test/expected/template.pot' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
   }
 
 };

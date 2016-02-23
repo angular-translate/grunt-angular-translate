@@ -1,4 +1,5 @@
 {
+    "NONAMESPACE": "NONAMESPACE",
     "SUB": {
         "NAMESPACE": {
             "VAL 1": "My default SUB.NAMESPACE.VAL 1",

@@ -1,6 +1,6 @@
 {
   "name": "grunt-angular-translate",
-  "version": "0.3.0",
+  "version": "0.3.3",
   "description": "Extract all the translation keys for angular-translate project",
   "main": "Gruntfile.js",
   "directories": {
@@ -19,8 +19,9 @@
     "grunt-contrib-clean": "^0.5.0",
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-contrib-nodeunit": "~0.1.2",
-    "grunt-markdox": "^0.1.0"
+    "grunt-contrib-nodeunit": "^0.4.1",
+    "grunt-markdox": "^0.1.0",
+    "nodeunit": "^0.9.1"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
@@ -53,7 +54,8 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "flat": "^1.2.0",
+    "json-stable-stringify": "^1.0.0",
     "lodash": "~2.4.1",
-    "json-stable-stringify": "^1.0.0"
+    "pofile": "^0.2.12"
   }
 }
