@@ -204,6 +204,27 @@ module.exports = function(grunt) {
       },
 
       /**
+       * Test case: Use consistent output with options
+       */
+      extra_regexs_object: {
+        prefix:   '10_1_',
+        suffix:   '.json',
+        src:      [ 'test/fixtures/*.html', 'test/fixtures/*.js', '!test/fixtures/links.js', '!test/fixtures/index_key_as_text.html'  ],
+        lang:     ['fr_FR'],
+        customRegex: {
+          'translate_function\\(\\s*\'((?:\\\\.|[^\'\\\\])*)\'[^\\)]*\\)': function (translationKey) {
+            console.log('okokokok')
+            return translationKey.replace(/\\\'/g, "'");
+          },
+          'translate_function\\(\\s*"((?:\\\\.|[^"\\\\])*)"[^\\)]*\\)': function (translationKey) {
+            console.log('okokokok')
+            return translationKey.replace(/\\\"/g, '"');
+          }
+        },
+        dest:     'tmp'
+      },
+
+      /**
        * Test case: Preserve translation links
        */
       keep_translation_links: {
