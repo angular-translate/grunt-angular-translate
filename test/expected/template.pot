@@ -41,12 +41,24 @@ msgid "HtmlDirective 2/2"
 msgstr ""
 
 msgctxt ""
+msgid "HtmlDirectiveDoubleQuoteStandalone"
+msgstr "test 02"
+
+msgctxt ""
+msgid "HtmlDirectiveKeyFromText"
+msgstr ""
+
+msgctxt ""
 msgid "HtmlDirectivePluralFirst"
 msgstr "{NB, plural, one{HtmlDirectivePluralFirst for one!} other{# HtmlDirectivePluralFirst for others!}}"
 
 msgctxt ""
 msgid "HtmlDirectivePluralSecond"
 msgstr "{NB, plural, one{HtmlDirectivePluralSecond for one!} other{# HtmlDirectivePluralSecond for others!}}"
+
+msgctxt ""
+msgid "HtmlDirectiveSimpleQuoteStandalone"
+msgstr "test 01"
 
 msgctxt ""
 msgid "HtmlDirectiveStandalone"

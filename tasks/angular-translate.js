@@ -64,7 +64,15 @@ module.exports = function (grunt) {
           var translationDefaultValue = "";
 
           switch (regexName) {
+            case 'HtmlDirectiveSimpleQuote':
+            case 'HtmlDirectiveDoubleQuote':
+              translationKey = r[1].trim();
+              translationDefaultValue = (r[2] || "").trim();
+              break;
             case 'HtmlDirectivePluralFirst':
+              if (!r.length > 2) {
+                return;
+              }
               var tmp = r[1];
               r[1] = r[2];
               r[2] = tmp;
@@ -129,7 +137,7 @@ module.exports = function (grunt) {
           }
 
           if( regexName !== "JavascriptServiceArraySimpleQuote" &&
-              regexName !== "JavascriptServiceArrayDoubleQuote") {
+            regexName !== "JavascriptServiceArrayDoubleQuote") {
             if(keyAsText === true && translationDefaultValue.length === 0) {
               results[ translationKey ] = translationKey;
             } else {
@@ -146,8 +154,9 @@ module.exports = function (grunt) {
       commentDoubleQuote: '\\/\\*\\s*i18nextract\\s*\\*\\/"((?:\\\\.|[^"\\\\])*)"',
       HtmlFilterSimpleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
       HtmlFilterDoubleQuote: escapeRegExp(interpolation.startDelimiter) + '\\s*(?:::)?"((?:\\\\.|[^"\\\\\])*)"\\s*\\|\\s*translate(:.*?)?\\s*' + escapeRegExp(interpolation.endDelimiter),
-      HtmlDirective: '<(?:[^>"]|"(?:[^"]|/")*")*\\stranslate(?:\\s[^{>]*>|>)([^<]*)<\/[^>]*>',
-      HtmlDirectiveStandalone: 'translate="((?:\\\\.|[^"\\\\])*)"',
+      HtmlDirective: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate(?:>|\\s[^>]*>)([^<]*)',
+      HtmlDirectiveSimpleQuote: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate=\'([^\']*)\'[^>]*>([^<]*)',
+      HtmlDirectiveDoubleQuote: '<(?:[^>"]|"(?:[^"]|\\/")*")*\\stranslate="([^"]*)"[^>]*>([^<]*)',
       HtmlDirectivePluralLast: 'translate="((?:\\\\.|[^"\\\\])*)".*angular-plural-extract="((?:\\\\.|[^"\\\\])*)"',
       HtmlDirectivePluralFirst: 'angular-plural-extract="((?:\\\\.|[^"\\\\])*)".*translate="((?:\\\\.|[^"\\\\])*)"',
       HtmlNgBindHtml: 'ng-bind-html="\\s*\'((?:\\\\.|[^\'\\\\])*)\'\\s*\\|\\s*translate(:.*?)?\\s*"',
