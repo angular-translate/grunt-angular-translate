@@ -37,7 +37,7 @@ module.exports = function (grunt) {
       prefix = this.data.prefix || '',
       safeMode = this.data.safeMode ? true : false,
       suffix = this.data.suffix,
-      customRegex = _.isArray(this.data.customRegex) ? this.data.customRegex : [],
+      customRegex = _.isArray(this.data.customRegex) || _.isObject(this.data.customRegex) ? this.data.customRegex : [],
       stringify_options = this.data.stringifyOptions || null,
       results = {},
       keyAsText = this.data.keyAsText || false,
@@ -121,6 +121,13 @@ module.exports = function (grunt) {
               break;
           }
 
+          // Check for customRegex
+          if (_.isObject(customRegex) && !_.isArray(customRegex) && customRegex.hasOwnProperty(regexName)) {
+            if (_.isFunction(customRegex[regexName])) {
+              translationKey = customRegex[regexName](translationKey) || translationKey;
+            }
+          }
+
           if( regexName !== "JavascriptServiceArraySimpleQuote" &&
               regexName !== "JavascriptServiceArrayDoubleQuote") {
             if(keyAsText === true && translationDefaultValue.length === 0) {
@@ -155,7 +162,11 @@ module.exports = function (grunt) {
     };
 
     _.forEach(customRegex, function (regex, key) {
-      regexs['others_' + key] = regex;
+      if (_.isObject(customRegex) && !_.isArray(customRegex)) {
+        regexs[key] = key;
+      } else {
+        regexs['others_' + key] = regex;
+      }
     });
 
 

@@ -134,6 +134,16 @@ exports.i18nextract = {
     test.done();
   },
 
+  extra_regexs_object: function(test) {
+    test.expect(1);
+
+    var actual = grunt.file.read( 'tmp/10_1_fr_FR.json' );
+    var expected = grunt.file.read( 'test/expected/10_1_fr_FR.json' );
+    test.equal( actual, expected, 'Should equal.' );
+
+    test.done();
+  },
+
   keep_translation_links: function(test) {
     test.expect(1);
 
